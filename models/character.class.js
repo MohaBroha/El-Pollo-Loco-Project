@@ -2,9 +2,45 @@ class Character extends MovableObject {
     y = 155;
     height = 280;
     width = 150;
+    speed = 10;
+    IMAGES_WALKING = [
+        'img/img/2_character_pepe/2_walk/W-21.png',
+        'img/img/2_character_pepe/2_walk/W-22.png',
+        'img/img/2_character_pepe/2_walk/W-23.png',
+        'img/img/2_character_pepe/2_walk/W-24.png',
+        'img/img/2_character_pepe/2_walk/W-25.png',
+        'img/img/2_character_pepe/2_walk/W-26.png'
+    ];
+    world;
 
     constructor() {
-        super().loadImage('img/img/2_character_pepe/1_idle/idle/I-2.png');
+        super().loadImage('img/img/2_character_pepe/2_walk/W-21.png');
+        this.loadImages(this.IMAGES_WALKING);
+
+        this.animate();
+    }
+
+    animate() {
+
+        setInterval(() => {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                this.x += this.speed;
+                this.otherDirection = false;
+            }
+            if (this.world.keyboard.LEFT && this.x > -2000) {
+                this.x -= this.speed;
+                this.otherDirection = true;
+            }
+            this.world.camera_x = -this.x + 100;
+        }, 1000 / 60);
+
+
+        setInterval(() => {
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+        }, 50);
     }
 
     jump() {
