@@ -54,5 +54,12 @@ const level1 = new Level(
         new BackgroundObjects('img/img/5_background/layers/1_first_layer/2.png', 720 * 5)
 
 
+    ],
+
+    [
+        new Coin(300, 350),
+        new Coin(600, 330),
+        new Coin(900, 360)
     ]
+
 );
