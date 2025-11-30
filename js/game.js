@@ -1,14 +1,18 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let bgMusic = new Sound('audio/juego-peligroso-background-latin-vlog-music-for-video-stories-379503.mp3');
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
+    world = new World(canvas, keyboard, bgMusic);
 
     console.log('My Character is', world.character);
-}
 
+    canvas.addEventListener('click', () => {
+        bgMusic.play();
+    });
+}
 
 
 
@@ -33,6 +37,9 @@ window.addEventListener("keydown", (e) => {
     if (e.keyCode == 32) {
         keyboard.SPACE = true;
     }
+    if (e.keyCode == 68) {
+        keyboard.D = true;
+    }
     console.log(e);
 
 });
@@ -56,6 +63,9 @@ window.addEventListener("keyup", (e) => {
 
     if (e.keyCode == 32) {
         keyboard.SPACE = false;
+    }
+    if (e.keyCode == 68) {
+        keyboard.D = false;
     }
 
 });
