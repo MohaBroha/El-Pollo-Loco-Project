@@ -51,6 +51,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.applyGravity();
         this.animate();
+        this.carryingBottles = [];
     }
 
     animate() {
@@ -66,7 +67,7 @@ class Character extends MovableObject {
                 this.jump();
             }
             this.world.camera_x = -this.x + 100;
-        }, 1000 / 60);
+        }, 2000 / 60);
 
 
         setInterval(() => {
