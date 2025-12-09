@@ -1,40 +1,54 @@
 class Chicken extends MovableObject {
 
-    y = 330;
-    height = 100;
-    width = 90;
+    height = 70;
+    width = 70;
+    y = 350;
+    energy = 100;
+    dead = false;
+
     IMAGES_WALKING = [
         'img/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         'img/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
         'img/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
 
-
     constructor() {
-        super().loadImage('img/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
+        super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
 
-        this.x = 200 + Math.random() * 500;
-        this.speed = 0.15 + Math.random() * 0.5;
-        this.animate();
+        this.deathImage = 'img/img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
+        this.deathSound = new Sound('audio/audio_chicken-dying.mp3', false, 0.2);
 
+        this.x = 800 + Math.random() * 2000;
+        this.speed = 0.2 + Math.random() * 0.35;
+
+        this.animate();
     }
+
     animate() {
         setInterval(() => {
+            if (this.isDead()) return;
             this.moveLeft();
             this.otherDirection = false;
         }, 1000 / 60);
 
-        this.moveLeft();
-
         setInterval(() => {
+            if (this.isDead()) return;
             this.playAnimation(this.IMAGES_WALKING);
-
-        }, 200);
+        }, 160);
     }
 
-    jump() {
-        this.speedY = 30;
+    hit() {
+        this.energy -= 100;
+        if (this.energy <= 0) {
+            this.energy = 0;
+            this.dead = true;
+            this.loadImage(this.deathImage);
+            this.deathSound.play();
+        }
     }
 
+    isDead() {
+        return this.dead;
+    }
 }
