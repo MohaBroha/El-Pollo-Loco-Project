@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Milonga&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="img/img/2_character_pepe/1_idle/idle/I-1.png">
+
     <title>El Pollo Loco</title>
 
     <script src="models/sound.class.js"></script>
@@ -12,12 +18,14 @@
     <script src="models/movable-object.class.js"></script>
     <script src="models/pickup-bottle.class.js"></script>
     <script src="models/coin.class.js"></script>
-    <script src="models/status-bar.class.js"></script>
+    <script src="models/statusbar.class.js"></script>
     <script src="models/coins-statusbar.class.js"></script>
     <script src="models/bottle-statusbar.class.js"></script>
+    <script src="models/endboss-statusbar.class.js"></script>
     <script src="models/character.class.js"></script>
     <script src="models/throwable-object.js"></script>
     <script src="models/chicken.class.class.js"></script>
+    <script src="models/small-chicken.class.js"></script>
     <script src="models/cloud.class.js"></script>
     <script src="models/background-object.class.js"></script>
     <script src="models/endboss.class.js"></script>
@@ -25,24 +33,33 @@
     <script src="models/level.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="models/world.class.js"></script>
-
 </head>
 
 <body>
 
     <h1>El Pollo Loco</h1>
-    <div id="startContainer">
-        <canvas id="canvas" width="920" height="480"></canvas>
-        <button id="startButton">Start</button>
+
+    <div id="orientation-warning">
+        Turn your Device to play.
     </div>
 
-    <div id="ui-container">
-        <button id="play-btn">▶️</button>
-        <button id="fullscreen-btn">⛶</button>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+    <div id="game-container">
+        <div id="startContainer">
+            <canvas id="canvas" width="920" height="480"></canvas>
 
-        <button id="mute-btn">🔇 Lautlos</button>
-        <button id="settings-btn">⚙️</button>
+            <button id="startButton">Start</button>
+            <button id="playAgainBtn">Play Again</button>
+
+            <button id="fullscreen-btn">⛶</button>
+            <button id="mute-btn">🔇</button>
+            <button id="settings-btn">⚙️</button>
+        </div>
+
+        <div id="touch-buttons">
+            <button class="canvas-btn">⬅️</button>
+            <button class="canvas-btn">➡️</button>
+            <button class="canvas-btn">⬆️</button>
+        </div>
     </div>
 
     <div id="controls-overlay">
@@ -51,14 +68,20 @@
             <ul>
                 <li>Bewegung: Pfeiltasten</li>
                 <li>Springen: Leertaste</li>
-                <li>Feuer: F</li>
+                <li>Feuer: D</li>
             </ul>
             <button id="close-controls">Schließen</button>
         </div>
     </div>
 
+    <div id="impressum">
+        &copy; 2025 Alle Rechte vorbehalten
+        <a href="impressum.html">Impressum</a>
+    </div>
+
     <script src="js/game.js"></script>
     <script src="js/ui.js"></script>
+
 </body>
 
 </html>
