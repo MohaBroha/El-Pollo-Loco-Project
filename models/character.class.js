@@ -1,8 +1,21 @@
 class Character extends MovableObject {
+
     y = 80;
     height = 280;
     width = 150;
     speed = 10;
+
+    energy = 100;
+    lastHitTime = 0;
+    invincibleDuration = 1000;
+
+    idleTime = 0;
+    idleDelay = 3000;
+
+    walkingSound = new Sound('audio/audio_walk.mp3', false, 0.3);
+    jumpSound = new Sound('audio/audio_jump.mp3', false, 0.3);
+    snoreSound = new Sound('audio/audio_snoring.mp3', true, 0.7);
+
     IMAGES_WALKING = [
         'img/img/2_character_pepe/2_walk/W-21.png',
         'img/img/2_character_pepe/2_walk/W-22.png',
@@ -24,6 +37,19 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/3_jump/J-39.png'
     ];
 
+    IMAGES_IDLE_LONG = [
+        'img/img/2_character_pepe/1_idle/long_idle/I-11.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-12.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-13.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-14.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-15.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-16.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-17.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-18.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-19.png',
+        'img/img/2_character_pepe/1_idle/long_idle/I-20.png'
+    ];
+
     IMAGES_DEAD = [
         'img/img/2_character_pepe/5_dead/D-51.png',
         'img/img/2_character_pepe/5_dead/D-52.png',
@@ -32,59 +58,126 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/5_dead/D-55.png',
         'img/img/2_character_pepe/5_dead/D-56.png',
         'img/img/2_character_pepe/5_dead/D-57.png'
-
     ];
+
     IMAGES_HURT = [
         'img/img/2_character_pepe/4_hurt/H-41.png',
         'img/img/2_character_pepe/4_hurt/H-42.png',
         'img/img/2_character_pepe/4_hurt/H-43.png'
-
     ];
 
     world;
+    carryingBottles = [];
 
     constructor() {
         super().loadImage('img/img/2_character_pepe/2_walk/W-21.png');
+
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
+        this.loadImages(this.IMAGES_IDLE_LONG);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+
         this.applyGravity();
         this.animate();
-        this.carryingBottles = [];
     }
 
     animate() {
-
         setInterval(() => {
+            let moved = false;
+
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
+                moved = true;
+                this.walkingSound.play();
             }
+
             if (this.world.keyboard.LEFT && this.x > -2000) {
                 this.moveLeft();
+                moved = true;
+                this.walkingSound.play();
             }
+
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
+                moved = true;
+                this.jumpSound.play();
             }
-            this.world.camera_x = -this.x + 100;
-        }, 2000 / 60);
 
+            this.world.camera_x = -this.x + 100;
+
+            if (moved) {
+                this.idleTime = 0;
+                this.snoreSound.pause();
+            } else {
+                this.idleTime += 1000 / 60;
+            }
+        }, 2500 / 60);
 
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-            } else if (this.isHurt()) {
+                return;
+            }
+
+            if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
+                return;
             }
-            else if (this.isAboveGround()) {
+
+            if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-            } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                }
+
+                return;
             }
-        }, 50);
+
+            if (this.idleTime > this.idleDelay) {
+                this.playAnimation(this.IMAGES_IDLE_LONG);
+                this.snoreSound.play();
+                return;
+            }
+
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+        }, 80);
+    }
+
+    throwBottle() {
+        if (this.carryingBottles.length <= 0) return null;
+
+        const bottleX = this.otherDirection ? this.x - 50 : this.x + this.width;
+        const bottle = new ThrowableObject(bottleX, this.y + 50, this.otherDirection);
+
+        this.carryingBottles.pop();
+        return bottle;
     }
 
 
+    hit() {
+        const now = Date.now();
+        if (now - this.lastHitTime > this.invincibleDuration) {
+            this.energy -= 20;
+            if (this.energy < 0) this.energy = 0;
+            this.lastHitTime = now;
+
+            if (this.world && this.world.statusBar) {
+                this.world.statusBar.setPercentage(this.energy);
+            }
+
+            if (this.energy <= 0 && !gameEnded) {
+                showEndScreen(false);
+            }
+        }
+    }
+
+
+    isDead() {
+        return this.energy <= 0;
+
+    }
+
+    isHurt() {
+        return Date.now() - this.lastHitTime < this.invincibleDuration;
+    }
 }
