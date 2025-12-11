@@ -45,6 +45,10 @@ function init() {
 
 }
 
+
+
+
+
 function restartGame() {
     gameEnded = false;
 
@@ -73,9 +77,15 @@ function restartGame() {
 
 function showEndScreen(won = false) {
     gameEnded = true;
-    Sound.muteAll(true);
 
 
+    if (bgMusic) bgMusic.pause();
+
+    if (won) {
+        Sound.GOOD_RESULT.play();
+    } else {
+        Sound.GAME_OVER.play();
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.globalAlpha = 0.75;
