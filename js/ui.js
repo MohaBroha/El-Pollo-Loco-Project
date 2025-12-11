@@ -2,10 +2,10 @@ const startBtn = document.getElementById('startButton');
 const playAgainBtn = document.getElementById('playAgainBtn');
 const fullscreenBtn = document.getElementById('fullscreen-btn');
 const muteBtn = document.getElementById('mute-btn');
-const settingsBtn = document.getElementById('settings-btn');
+const infoBtn = document.getElementById('info-btn');
 const controlsOverlay = document.getElementById('controls-overlay');
 
-let uiButtons = [fullscreenBtn, muteBtn, settingsBtn];
+let uiButtons = [fullscreenBtn, muteBtn, infoBtn];
 let uiTimeout;
 let muted = false;
 let buttonActive = false;
@@ -59,7 +59,7 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-settingsBtn.addEventListener('click', (e) => {
+infoBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     controlsOverlay.classList.toggle('show');
 });
@@ -70,7 +70,7 @@ document.getElementById('close-controls').addEventListener('click', (e) => {
 });
 
 document.addEventListener('click', (e) => {
-    if (!controlsOverlay.contains(e.target) && e.target !== settingsBtn) {
+    if (!controlsOverlay.contains(e.target) && e.target !== infoBtn) {
         controlsOverlay.classList.remove('show');
     }
 });
