@@ -80,5 +80,7 @@ class Sound {
         Sound.COIN = new Sound('audio/mixkit-video-game-treasure-2066.wav', false, 0.1);
         Sound.BOSS1 = new Sound('audio/endboss_sound1.mp3', false, 0.7);
         Sound.SPLASH = new Sound('audio/splash1.mp3', false, 0.6);
+        Sound.GAME_OVER = new Sound('audio/game-over-arcade-6435.mp3', false, 0.5);
+        Sound.GOOD_RESULT = new Sound('audio/goodresult-82807.mp3', false, 0.5);
     }
 }
