@@ -42,7 +42,6 @@ function init() {
 
     bgMusic = Sound.playSound('audio/juego-peligroso-background-latin-vlog-music-for-video-stories-379503.mp3');
 
-
 }
 
 
@@ -77,7 +76,6 @@ function restartGame() {
 
 function showEndScreen(won = false) {
     gameEnded = true;
-
 
     if (bgMusic) bgMusic.pause();
 
