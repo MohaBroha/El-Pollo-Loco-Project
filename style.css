@@ -252,6 +252,7 @@ canvas {
 }
 
 #impressum {
+    background-color: hsla(27, 92%, 42%, 0.502);
     position: fixed;
     bottom: 5px;
     left: 50%;
