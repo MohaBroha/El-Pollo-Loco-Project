@@ -196,6 +196,7 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
+
     addobjectstoMap(objects) {
         objects.forEach(o => this.addtoMap(o));
     }
