@@ -44,7 +44,7 @@ class Chicken extends MovableObject {
             this.energy = 0;
             this.dead = true;
             this.loadImage(this.deathImage);
-            this.deathSound.play();
+            audioManager.playSound("chickenDead");
         }
     }
 

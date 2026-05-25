@@ -5,6 +5,7 @@ let keyboard = new Keyboard();
 let gameStarted = false;
 let gameEnded = false;
 let allIntervals = [];
+const audioManager = new AudioManager();
 
 let bgMusic;
 
@@ -130,3 +131,4 @@ window.addEventListener("keyup", (e) => {
         case 68: keyboard.D = false; break;
     }
 });
+

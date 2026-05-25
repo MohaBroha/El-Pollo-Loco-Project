@@ -9,12 +9,13 @@ class Character extends MovableObject {
     lastHitTime = 0;
     invincibleDuration = 1000;
 
+
+
     idleTime = 0;
     idleDelay = 3000;
 
-    walkingSound = new Sound('audio/audio_walk.mp3', false, 0.3);
-    jumpSound = new Sound('audio/audio_jump.mp3', false, 0.3);
-    snoreSound = new Sound('audio/audio_snoring.mp3', true, 0.7);
+    isWalking = false;
+    snorePlayed = false;
 
     IMAGES_WALKING = [
         'img/img/2_character_pepe/2_walk/W-21.png',
@@ -83,38 +84,53 @@ class Character extends MovableObject {
     }
 
     animate() {
+
+        // 🎮 GAME LOGIC LOOP
         setInterval(() => {
+
             let moved = false;
 
+            // RIGHT
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 moved = true;
-                this.walkingSound.play();
+                this.handleWalkSound();
             }
 
+            // LEFT
             if (this.world.keyboard.LEFT && this.x > -2000) {
                 this.moveLeft();
                 moved = true;
-                this.walkingSound.play();
+                this.handleWalkSound();
             }
 
+            // JUMP
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
                 moved = true;
-                this.jumpSound.play();
+                audioManager.playSound("jump");
             }
 
             this.world.camera_x = -this.x + 100;
 
+            // IDLE HANDLING
             if (moved) {
                 this.idleTime = 0;
-                this.snoreSound.pause();
-            } else {
-                this.idleTime += 1000 / 60;
-            }
-        }, 2500 / 60);
+                this.snorePlayed = false;
+                this.isWalking = true;
 
+                audioManager.stopSound("snore");
+
+            } else {
+                this.idleTime += 16;
+                this.isWalking = false;
+            }
+        }, 1000 / 60);
+
+
+        // 🎞 ANIMATION  L OOP
         setInterval(() => {
+
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
@@ -127,20 +143,33 @@ class Character extends MovableObject {
 
             if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-
                 return;
             }
 
             if (this.idleTime > this.idleDelay) {
                 this.playAnimation(this.IMAGES_IDLE_LONG);
-                this.snoreSound.play();
+
+                if (!this.snorePlayed) {
+                    audioManager.playSound("snore");
+                    this.snorePlayed = true;
+                }
+
                 return;
             }
 
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
             }
+
         }, 80);
+    }
+
+    // 🚶 WALK SOUND CONTROL (ANTI-SPAM)
+    handleWalkSound() {
+        if (!this.isWalking) {
+            this.isWalking = true;
+            audioManager.playSound("walk");
+        }
     }
 
     throwBottle() {
@@ -153,12 +182,14 @@ class Character extends MovableObject {
         return bottle;
     }
 
-
     hit() {
         const now = Date.now();
+
         if (now - this.lastHitTime > this.invincibleDuration) {
             this.energy -= 20;
+
             if (this.energy < 0) this.energy = 0;
+
             this.lastHitTime = now;
 
             if (this.world && this.world.statusBar) {
@@ -171,10 +202,8 @@ class Character extends MovableObject {
         }
     }
 
-
     isDead() {
         return this.energy <= 0;
-
     }
 
     isHurt() {
