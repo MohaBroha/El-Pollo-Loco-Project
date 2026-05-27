@@ -99,10 +99,6 @@ class MovableObject extends DrawableObject {
             this.loadImage(this.deathImage);
         }
 
-        if (this.deathSound) {
-            const s = new Audio(this.deathSound);
-            s.volume = 0.3;
-            s.play();
-        }
+
     }
 }

@@ -11,7 +11,7 @@ class SmallChicken extends MovableObject {
         'img/img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ];
 
-    deathSound = new Sound('audio/small-chicken.mp3', false, 0.7);
+    deathSound = "chickenSmall";
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
@@ -41,7 +41,8 @@ class SmallChicken extends MovableObject {
             this.energy = 0;
             this.dead = true;
             this.loadImage(this.deathImage);
-            this.deathSound.play();
+
+            audioManager.playSound(this.deathSound);
         }
     }
 

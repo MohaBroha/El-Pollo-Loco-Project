@@ -6,7 +6,6 @@ class Coin extends MovableObject {
     currentFrame = 0;
     image = new Image();
 
-    collectSound = Sound.playSound('audio/mixkit-winning-a-coin-video-game-2069.wav');
 
     constructor(x, y) {
         super();
@@ -14,7 +13,7 @@ class Coin extends MovableObject {
         this.y = y;
         this.image.src = this.images[this.currentFrame];
 
-        this.collectSound.volume = 0.01;
+
 
         this.animate();
     }

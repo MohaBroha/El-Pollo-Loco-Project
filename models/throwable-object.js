@@ -19,8 +19,8 @@ class ThrowableObject extends MovableObject {
         'img/img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ];
 
-    splashSound = new Sound('audio/audio_splash.mp3', false, 0.25);
-    enemyHitSound = new Sound('audio/audio_splash1.mp3', false, 0.28);
+    splashSound = "splash";
+    enemyHitSound = "bottleSplash";
 
     speedY = 10;
     acceleration = 1;
@@ -74,7 +74,7 @@ class ThrowableObject extends MovableObject {
         if (this.hit) return;
         this.hit = true;
         clearInterval(this.rotationInterval);
-        this.enemyHitSound.play();
+        audioManager.playSound(this.enemyHitSound);
         this.playSplashAnimation(() => {
             this.toRemove = true;
         });
@@ -84,7 +84,7 @@ class ThrowableObject extends MovableObject {
         if (this.hit) return;
         this.hit = true;
         clearInterval(this.rotationInterval);
-        this.splashSound.play();
+        audioManager.playSound(this.splashSound);
         this.playSplashAnimation(() => {
             this.toRemove = true;
         });

@@ -7,8 +7,6 @@ let gameEnded = false;
 let allIntervals = [];
 const audioManager = new AudioManager();
 
-let bgMusic;
-
 let startScreenImage = new Image();
 startScreenImage.src = 'img/img/9_intro_outro_screens/start/startscreen_1.png';
 
@@ -25,11 +23,9 @@ function drawStartScreen() {
     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
 
     startScreenAnimationId = requestAnimationFrame(drawStartScreen);
-
 }
 
 function init() {
-    Sound.init();
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
 
@@ -40,14 +36,7 @@ function init() {
 
     gameStarted = true;
     gameEnded = false;
-
-    bgMusic = Sound.playSound('audio/juego-peligroso-background-latin-vlog-music-for-video-stories-379503.mp3');
-
 }
-
-
-
-
 
 function restartGame() {
     gameEnded = false;
@@ -59,8 +48,6 @@ function restartGame() {
     keyboard.SPACE = false;
     keyboard.D = false;
 
-    Sound.muteAll(false);
-
     allIntervals.forEach(id => clearInterval(id));
     allIntervals = [];
 
@@ -70,20 +57,15 @@ function restartGame() {
     world = new World(canvas, keyboard);
 
     gameStarted = true;
-
-    bgMusic.play();
 }
-
 
 function showEndScreen(won = false) {
     gameEnded = true;
 
-    if (bgMusic) bgMusic.pause();
-
     if (won) {
-        Sound.GOOD_RESULT.play();
+        audioManager.playSound("goodResult");
     } else {
-        Sound.GAME_OVER.play();
+        audioManager.playSound("gameOver");
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -102,7 +84,6 @@ function showEndScreen(won = false) {
 }
 
 window.onload = () => {
-
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     drawStartScreen();
@@ -110,6 +91,7 @@ window.onload = () => {
 
 window.addEventListener("keydown", (e) => {
     if (!gameStarted || gameEnded || buttonActive) return;
+
     switch (e.keyCode) {
         case 39: keyboard.RIGHT = true; break;
         case 37: keyboard.LEFT = true; break;
@@ -122,6 +104,7 @@ window.addEventListener("keydown", (e) => {
 
 window.addEventListener("keyup", (e) => {
     if (!gameStarted || gameEnded || buttonActive) return;
+
     switch (e.keyCode) {
         case 39: keyboard.RIGHT = false; break;
         case 37: keyboard.LEFT = false; break;
@@ -131,4 +114,3 @@ window.addEventListener("keyup", (e) => {
         case 68: keyboard.D = false; break;
     }
 });
-

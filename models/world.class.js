@@ -27,6 +27,8 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.level = level1;
+        this.startBackgroundMusic();
+
 
         this.level.enemies.forEach(e => e.world = this);
         this.setWorld();
@@ -72,6 +74,11 @@ class World {
             this.checkBottlePickup();
         }, 1000 / 60);
     }
+
+    startBackgroundMusic() {
+        audioManager.playMusic("bgMusic", true);
+    }
+
     updateEndbossStatusBar() {
         let endboss = this.level.enemies.find(e => e instanceof Endboss);
         if (endboss) this.endbossStatusBar.setPercentage(endboss.energy);
@@ -80,7 +87,7 @@ class World {
     checkCoinPickup() {
         this.coins.forEach(coin => {
             if (!coin.collected && this.checkCollision(this.character, coin) && this.character.isAboveGround()) {
-                coin.collectSound.play();
+                audioManager.playSound("coin");
                 coin.collected = true;
                 this.collectedCoins++;
                 this.coinStatusBar.setCoins(this.collectedCoins);

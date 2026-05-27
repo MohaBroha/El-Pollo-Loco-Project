@@ -43,11 +43,15 @@ fullscreenBtn.addEventListener('click', () => {
 muteBtn.addEventListener('click', () => {
     buttonActive = true;
 
-    Sound.mutedAll = !Sound.mutedAll;
-    Sound.muteAll(Sound.mutedAll);
+    muted = !muted;
 
-    muted = Sound.mutedAll;
-    muteBtn.textContent = muted ? '🔈' : '🔇';
+    if (audioManager && typeof audioManager.toggleMute === 'function') {
+        audioManager.toggleMute(muted);
+    } else if (Sound && audioManager.toggleMute) {
+        audioManager.toggleMute(muted);
+    }
+
+    muteBtn.textContent = muted ? '🔇' : '🔈';
 
     removeFocus(muteBtn);
     buttonActive = false;

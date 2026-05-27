@@ -66,6 +66,15 @@ class AudioManager {
         delete this.activeSounds[name];
     }
 
+    toggleMute(state) {
+        this.muted = state;
+
+        if (state) {
+            this.muteAll();
+        } else {
+            this.unmuteAll();
+        }
+    }
     // 🔇 MUTE
     muteAll() {
         this.muted = true;

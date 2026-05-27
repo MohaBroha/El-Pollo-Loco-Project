@@ -42,11 +42,6 @@ class Endboss extends MovableObject {
         'img/img/You won, you lost/Game Over.png'
     ];
 
-    attackSound = new Sound('audio/audio_endboss_sound1.mp3', false, 0.5);
-    hitSound = new Sound('audio/audio_endboss_sound2.mp3', false, 0.5);
-    deathSound = new Sound('audio/audio_endboss_sound3.mp3', false, 1);
-
-
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
 
@@ -67,10 +62,12 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAttackingNow) {
                 this.playAnimation(this.IMAGES_ATTACK);
+
                 if (!this.attackSoundPlayed) {
-                    this.attackSound.play();
+                    audioManager.playSound("bossAlert");
                     this.attackSoundPlayed = true;
                 }
+
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
                 this.attackSoundPlayed = false;
@@ -105,12 +102,6 @@ class Endboss extends MovableObject {
         }
     }
 
-    isAttacking() {
-        if (!this.world || !this.world.character) return false;
-        const distance = this.x - this.world.character.x;
-        return distance < 400 && distance > -50;
-    }
-
     isHurt() {
         return this.energy < 100 && this.energy > 0;
     }
@@ -119,11 +110,13 @@ class Endboss extends MovableObject {
         if (this.dead) return;
 
         this.energy -= 20;
-        this.hitSound.play();
+        audioManager.playSound("bossHit");
 
         if (this.energy <= 0) {
             this.energy = 0;
             this.dead = true;
+
+            audioManager.playSound("bossDeath");
 
             if (!gameEnded) {
                 showEndScreen(true);
@@ -133,13 +126,5 @@ class Endboss extends MovableObject {
 
     isDead() {
         return this.dead;
-    }
-
-    playDeath() {
-        if (this.dead) return;
-        this.dead = true;
-        this.loadImage(this.IMAGES_DEAD[0]);
-        this.attackSound.stop();
-        this.attackSound.play();
     }
 }
