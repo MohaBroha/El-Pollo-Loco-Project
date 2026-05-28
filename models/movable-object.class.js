@@ -29,13 +29,34 @@ class MovableObject extends DrawableObject {
         }
     }
 
-    isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x + mo.width &&
-            this.y < mo.y + mo.height;
+    isColliding(mo, shrink = 25) {
+        return (
+            this.x + this.width - shrink > mo.x + shrink &&
+            this.x + shrink < mo.x + mo.width - shrink &&
+            this.y + this.height - shrink > mo.y + shrink &&
+            this.y + shrink < mo.y + mo.height - shrink
+        );
     }
 
+    isSideCollision(mo) {
+        const shrink = 35;
+        return (
+            this.x + this.width - shrink > mo.x + shrink &&
+            this.x + shrink < mo.x + mo.width - shrink &&
+            this.y + this.height - shrink > mo.y + shrink &&
+            this.y + shrink < mo.y + mo.height - shrink
+        );
+    }
+
+    isTopCollision(mo) {
+        const horizontalShrink = 15;
+        return (
+            this.x + this.width - horizontalShrink > mo.x + horizontalShrink &&
+            this.x + horizontalShrink < mo.x + mo.width - horizontalShrink &&
+            this.y + this.height >= mo.y &&
+            this.y + this.height <= mo.y + 30
+        );
+    }
     hit() {
         this.energy -= 5;
         if (this.energy < 0) {
