@@ -57,20 +57,25 @@ class World {
             this.checkThrowObjects();
             this.checkThrowableObjectCollisions();
             this.updateEndbossStatusBar();
+            this.checkCoinPickup();
+            this.checkBottlePickup();
 
             const endboss = this.level.enemies.find(e => e instanceof Endboss);
             if (this.character.isDead()) {
-                showEndScreen(false);
-            } else if (endboss && endboss.isDead() && this.character.x >= endboss.x) {
-                showEndScreen(true);
+                if (!this.deathTriggered) {
+                    this.deathTriggered = true;
+
+                    setTimeout(() => {
+                        showEndScreen(false);
+                    }, 800);
+                }
+            } else if (endboss && endboss.isDead() && !this.endbossDeathTriggered) {
+                this.endbossDeathTriggered = true;
+
+                setTimeout(() => {
+                    showEndScreen(true);
+                }, 1200);
             }
-
-        }, 1000 / 60);
-
-        setStoppableInterval(() => {
-            if (gameEnded) return;
-            this.checkCoinPickup();
-            this.checkBottlePickup();
         }, 1000 / 60);
     }
 
@@ -131,7 +136,6 @@ class World {
             if (!bottle.hit) {
                 this.level.enemies.forEach(enemy => {
 
-                    // ✅ MINIMAL FIX: hasHitEnemy Schutz
                     if (!enemy.isDead() && !bottle.hasHitEnemy && this.checkCollision(bottle, enemy)) {
 
                         enemy.hit();
@@ -171,6 +175,7 @@ class World {
             }
         });
     }
+
     checkCollision(obj1, obj2) {
         const o1 = obj1.offset || { top: 0, bottom: 0, left: 0, right: 0 };
         const o2 = obj2.offset || { top: 0, bottom: 0, left: 0, right: 0 };
@@ -212,12 +217,19 @@ class World {
         this.addtoMap(this.statusBar);
         this.addtoMap(this.coinStatusBar);
         this.addtoMap(this.bottleStatusBar);
-        this.addtoMap(this.endbossStatusBar);
+
+
+        const endboss = this.level.enemies.find(e => e instanceof Endboss);
+
+        if (endboss && Math.abs(this.character.x - endboss.x) < 800) {
+            this.addtoMap(this.endbossStatusBar);
+        }
 
         requestAnimationFrame(() => this.draw());
     }
 
     addobjectstoMap(objects) {
+        if (!objects) return;
         objects.forEach(o => this.addtoMap(o));
     }
 

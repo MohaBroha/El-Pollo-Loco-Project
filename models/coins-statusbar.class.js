@@ -25,14 +25,16 @@ class CoinStatusBar extends DrawableObject {
 
     setCoins(coinsCollected) {
         this.coinsCollected = coinsCollected;
-        let index = this.resolveImageIndex();
-        let path = this.IMAGES[index];
+
+        const path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
     resolveImageIndex() {
-        let percentage = this.coinsCollected / this.maxCoins;
-        let index = Math.floor(percentage * (this.IMAGES.length - 1));
+        if (this.coinsCollected <= 0) return 0;
+        const maxIndex = this.IMAGES.length - 1;
+        const ratio = this.coinsCollected / this.maxCoins;
+        const index = Math.min(maxIndex, Math.ceil(ratio * maxIndex));
         return index;
     }
 }

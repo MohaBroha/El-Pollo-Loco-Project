@@ -5,6 +5,8 @@ let keyboard = new Keyboard();
 let gameStarted = false;
 let gameEnded = false;
 let allIntervals = [];
+let endScreenShown = false; // guard to prevent multiple end-screen triggers
+
 const audioManager = new AudioManager();
 
 let startScreenImage = new Image();
@@ -40,6 +42,7 @@ function init() {
 
 function restartGame() {
     gameEnded = false;
+    endScreenShown = false;
     audioManager.setGameEnded(false);
     audioManager.stopAll();
 
@@ -62,6 +65,10 @@ function restartGame() {
 }
 
 function showEndScreen(won = false) {
+    // prevent multiple invocations playing the sound twice
+    if (endScreenShown) return;
+    endScreenShown = true;
+
     gameEnded = true;
     audioManager.setGameEnded(true);
     audioManager.stopAll();
