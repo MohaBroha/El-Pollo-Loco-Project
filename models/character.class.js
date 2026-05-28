@@ -15,6 +15,9 @@ class Character extends MovableObject {
     idleDelay = 3000;
 
     isWalking = false;
+    hasJustStopped = false;
+
+    hasJustLanded = false;
     snorePlayed = false;
 
     IMAGES_WALKING = [
@@ -111,6 +114,12 @@ class Character extends MovableObject {
                 audioManager.playSound("jump");
             }
 
+            if (this.wasAboveGround && !this.isAboveGround()) {
+                this.hasJustLanded = true;
+            }
+
+            this.wasAboveGround = this.isAboveGround();
+
             this.world.camera_x = -this.x + 100;
 
             // IDLE HANDLING
@@ -118,17 +127,19 @@ class Character extends MovableObject {
                 this.idleTime = 0;
                 this.snorePlayed = false;
                 this.isWalking = true;
+                this.hasJustStopped = false;
+
 
                 audioManager.stopSound("snore");
 
             } else {
-                this.idleTime += 16;
+                this.idleTime += 5;
                 this.isWalking = false;
             }
         }, 1000 / 60);
 
 
-        // 🎞 ANIMATION  L OOP
+
         setInterval(() => {
 
             if (this.isDead()) {
@@ -138,6 +149,16 @@ class Character extends MovableObject {
 
             if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
+                return;
+            }
+
+            if (this.hasJustLanded) {
+                this.playAnimation([this.IMAGES_JUMPING[8]]);
+
+                setTimeout(() => {
+                    this.hasJustLanded = false;
+                }, 120);
+
                 return;
             }
 
@@ -159,10 +180,21 @@ class Character extends MovableObject {
 
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
+                this.hasJustStopped = false;
+
+            } else {
+                if (!this.hasJustStopped) {
+                    this.img = this.imageCache[
+                        this.IMAGES_WALKING[this.IMAGES_WALKING.length - 1]
+                    ];
+
+                    this.hasJustStopped = true;
+                }
             }
 
-        }, 80);
+        }, 100);
     }
+
 
     // 🚶 WALK SOUND CONTROL (ANTI-SPAM)
     handleWalkSound() {
@@ -196,9 +228,8 @@ class Character extends MovableObject {
                 this.world.statusBar.setPercentage(this.energy);
             }
 
-            if (this.energy <= 0 && !gameEnded) {
+            if (this.energy <= 0 && !gameEnded)
                 showEndScreen(false);
-            }
         }
     }
 

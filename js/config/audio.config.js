@@ -13,7 +13,7 @@ const AUDIO_LIBRARY = {
     bossHurt: { file: "boss-hurt.mp3", volume: 0.5 },
 
     splash: { file: "splash.mp3", volume: 0.7 },
-    bottlePickup: { file: "bottle-clink.mp3", volume: 0.4 },
+    bottlePickup: { file: "bottle-clink.mp3", volume: 0.2 },
     bottleSplash: { file: "bottle-splash.mp3", volume: 0.6 },
 
     coin: { file: "coin.mp3", volume: 0.1 },

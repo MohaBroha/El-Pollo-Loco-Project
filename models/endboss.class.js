@@ -83,7 +83,7 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_WALKING);
                 this.attackSoundPlayed = false;
             }
-        }, 200);
+        }, 500);
 
         setInterval(() => {
             if (!this.world || !this.world.character || this.dead) return;

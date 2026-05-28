@@ -29,7 +29,6 @@ class World {
         this.level = level1;
         this.startBackgroundMusic();
 
-
         this.level.enemies.forEach(e => e.world = this);
         this.setWorld();
 
@@ -124,15 +123,21 @@ class World {
 
     checkThrowableObjectCollisions() {
         this.throwableObjects.forEach(bottle => {
+
             if (!bottle.hit && (bottle.y + bottle.height) >= 500) {
                 bottle.hitGround();
             }
 
             if (!bottle.hit) {
                 this.level.enemies.forEach(enemy => {
-                    if (!enemy.isDead() && this.checkCollision(bottle, enemy)) {
+
+                    // ✅ MINIMAL FIX: hasHitEnemy Schutz
+                    if (!enemy.isDead() && !bottle.hasHitEnemy && this.checkCollision(bottle, enemy)) {
+
                         enemy.hit();
                         bottle.hitEnemy();
+                        bottle.hasHitEnemy = true;
+
                         if (enemy.isDead() && typeof enemy.playDeath === 'function') {
                             enemy.playDeath();
                         }
@@ -159,18 +164,20 @@ class World {
     }
 
     checkCollision(obj1, obj2) {
+        const shrink = 10;
+
         const o1 = obj1.offset || { top: 0, bottom: 0, left: 0, right: 0 };
         const o2 = obj2.offset || { top: 0, bottom: 0, left: 0, right: 0 };
 
-        const left1 = obj1.x + o1.left;
-        const right1 = obj1.x + obj1.width - o1.right;
-        const top1 = obj1.y + o1.top;
-        const bottom1 = obj1.y + obj1.height - o1.bottom;
+        const left1 = obj1.x + o1.left + shrink;
+        const right1 = obj1.x + obj1.width - o1.right - shrink;
+        const top1 = obj1.y + o1.top + shrink;
+        const bottom1 = obj1.y + obj1.height - o1.bottom - shrink;
 
-        const left2 = obj2.x + o2.left;
-        const right2 = obj2.x + obj2.width - o2.right;
-        const top2 = obj2.y + o2.top;
-        const bottom2 = obj2.y + obj2.height - o2.bottom;
+        const left2 = obj2.x + o2.left + shrink;
+        const right2 = obj2.x + obj2.width - o2.right - shrink;
+        const top2 = obj2.y + o2.top + shrink;
+        const bottom2 = obj2.y + obj2.height - o2.bottom - shrink;
 
         return left1 < right2 && right1 > left2 && top1 < bottom2 && bottom1 > top2;
     }
@@ -203,7 +210,6 @@ class World {
 
         requestAnimationFrame(() => this.draw());
     }
-
 
     addobjectstoMap(objects) {
         objects.forEach(o => this.addtoMap(o));

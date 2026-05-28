@@ -6,6 +6,7 @@ class CoinStatusBar extends DrawableObject {
     coinsCollected = 0;
     maxCoins = 30;
 
+
     IMAGES = [
         'img/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
         'img/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png',
