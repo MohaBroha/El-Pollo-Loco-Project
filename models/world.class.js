@@ -101,6 +101,7 @@ class World {
                 bottle.collected = true;
                 this.character.carryingBottles.push(bottle);
                 this.collectedBottles++;
+                audioManager.playSound("bottlePickup");
                 this.bottleStatusBar.setBottles(this.collectedBottles);
                 this.throwableObjectsOnGround.splice(index, 1);
             }

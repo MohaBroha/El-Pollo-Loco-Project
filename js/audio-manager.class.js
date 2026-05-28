@@ -6,35 +6,75 @@ class AudioManager {
         this.muted = false;
         this.volume = 1;
 
-        // 🔥 wichtig: MUSS immer existieren
-        this.activeSounds = {};
+        this.activeSounds = [];
+        this.soundLocks = {};
+
+        // 🎮 GAME STATE CONTROL
+        this.gameEnded = false;
 
         AudioManager.instance = this;
     }
 
-    // 🎧 SOUND EFFECTS
-    playSound(name) {
+
+
+    playSound(name, force = false) {
         if (this.muted) return;
 
-        const file = AUDIO_LIBRARY[name];
-        if (!file) return;
+        const endSounds = ["bossDeath", "gameOver", "victory"];
+
+        if (this.gameEnded && !force && !endSounds.includes(name)) {
+            return;
+        }
+
+        const entry = AUDIO_LIBRARY[name];
+        if (!entry) return;
+
+        // 🔒 LOCK erst NACH Validierung
+        if (!force && this.soundLocks[name]) return;
+
+        this.soundLocks[name] = true;
+
+        setTimeout(() => {
+            this.soundLocks[name] = false;
+        }, 300);
+
+        const file = typeof entry === "string" ? entry : entry.file;
+
+        const soundVolume =
+            typeof entry === "object" && entry.volume != null
+                ? entry.volume
+                : this.volume;
 
         const audio = new Audio(`audio/${file}`);
-        audio.volume = this.volume;
+        audio.volume = soundVolume;
+        audio.muted = this.muted;
         audio.currentTime = 0;
+
+        audio.addEventListener('ended', () => this._removeActiveSound(audio));
 
         audio.play().catch(() => { });
 
-        // nur tracken wenn wichtig (optional cleanup möglich)
-        this.activeSounds[name] = audio;
+        this.activeSounds.push({ name, audio });
+    }
+
+    _removeActiveSound(audio) {
+        this.activeSounds = this.activeSounds.filter(item => item.audio !== audio);
     }
 
     // 🎵 MUSIC
     playMusic(name, loop = true) {
-        const file = AUDIO_LIBRARY[name];
-        if (!file) return;
+        if (this.gameEnded) return;
 
-        // alte Musik sauber stoppen
+        const entry = AUDIO_LIBRARY[name];
+        if (!entry) return;
+
+        const file = typeof entry === "string" ? entry : entry.file;
+
+        const musicVolume =
+            typeof entry === "object" && entry.volume != null
+                ? entry.volume
+                : this.volume;
+
         if (this.music) {
             this.music.pause();
             this.music.currentTime = 0;
@@ -42,12 +82,22 @@ class AudioManager {
 
         this.music = new Audio(`audio/${file}`);
         this.music.loop = loop;
-        this.music.volume = this.volume;
+        this.music.volume = musicVolume;
+        this.music.muted = this.muted;
 
         this.music.play().catch(() => { });
+    }
 
-        // Sounds resetten bei Musikwechsel
-        this.activeSounds = {};
+    // 🧹 STOP ALL AUDIO
+    stopAll() {
+        this.stopMusic();
+
+        this.activeSounds.forEach(item => {
+            item.audio.pause();
+            item.audio.currentTime = 0;
+        });
+
+        this.activeSounds = [];
     }
 
     stopMusic() {
@@ -57,25 +107,33 @@ class AudioManager {
         this.music.currentTime = 0;
     }
 
-    stopSound(name) {
-        const audio = this.activeSounds[name];
-        if (!audio) return;
-
-        audio.pause();
-        audio.currentTime = 0;
-        delete this.activeSounds[name];
+    setGameEnded(state) {
+        this.gameEnded = state;
+        if (state) {
+            this.stopMusic();
+        }
     }
 
+    stopSound(name) {
+        const soundsToStop = this.activeSounds.filter(item => item.name === name);
+        if (soundsToStop.length === 0) return;
+
+        soundsToStop.forEach(item => {
+            item.audio.pause();
+            item.audio.currentTime = 0;
+        });
+
+        this.activeSounds = this.activeSounds.filter(item => item.name !== name);
+    }
+
+    // 🔇 MUTE SYSTEM
     toggleMute(state) {
         this.muted = state;
 
-        if (state) {
-            this.muteAll();
-        } else {
-            this.unmuteAll();
-        }
+        if (state) this.muteAll();
+        else this.unmuteAll();
     }
-    // 🔇 MUTE
+
     muteAll() {
         this.muted = true;
 
@@ -83,9 +141,8 @@ class AudioManager {
             this.music.pause();
         }
 
-        // alle Sounds stoppen
-        Object.values(this.activeSounds).forEach(a => {
-            a.pause();
+        this.activeSounds.forEach(item => {
+            item.audio.pause();
         });
     }
 
@@ -95,6 +152,10 @@ class AudioManager {
         if (this.music) {
             this.music.play().catch(() => { });
         }
+
+        this.activeSounds.forEach(item => {
+            item.audio.play().catch(() => { });
+        });
     }
 
     // 🔊 VOLUME CONTROL
@@ -105,8 +166,8 @@ class AudioManager {
             this.music.volume = value;
         }
 
-        Object.values(this.activeSounds).forEach(a => {
-            a.volume = value;
+        this.activeSounds.forEach(item => {
+            item.audio.volume = value;
         });
     }
 }

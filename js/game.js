@@ -40,6 +40,8 @@ function init() {
 
 function restartGame() {
     gameEnded = false;
+    audioManager.setGameEnded(false);
+    audioManager.stopAll();
 
     keyboard.RIGHT = false;
     keyboard.LEFT = false;
@@ -61,12 +63,9 @@ function restartGame() {
 
 function showEndScreen(won = false) {
     gameEnded = true;
-
-    if (won) {
-        audioManager.playSound("goodResult");
-    } else {
-        audioManager.playSound("gameOver");
-    }
+    audioManager.setGameEnded(true);
+    audioManager.stopAll();
+    audioManager.playSound(won ? "victory" : "gameOver", true);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.globalAlpha = 0.75;

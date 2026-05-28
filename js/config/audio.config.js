@@ -1,22 +1,24 @@
 const AUDIO_LIBRARY = {
-    walk: "walk.mp3",
-    jump: "jump.mp3",
-    snore: "snore.mp3",
-    bgMusic: "bg-music.mp3",
+    walk: { file: "walk.mp3", volume: 0.1 },
+    jump: { file: "jump.mp3", volume: 0.5 },
+    snore: { file: "snore.mp3", volume: 0.6 },
 
-    chickenDead: "chicken-dead.mp3",
-    chickenSmall: "chicken-small.mp3",
+    bgMusic: { file: "bg-music.mp3", volume: 0.10 },
 
-    bossAlert: "boss-alert.mp3",
-    bossAngry: "boss-angry.mp3",
-    bossHurt: "boss-hurt.mp3",
+    chickenDead: { file: "chicken-dead.mp3", volume: 0.3 },
+    chickenSmall: { file: "chicken-small.mp3", volume: 0.9 },
 
-    splash: "splash.mp3",
-    bottleSplash: "bottle-splash.mp3",
+    bossAlert: { file: "boss-alert.mp3", volume: 0.3 },
+    bossAngry: { file: "boss-angry.mp3", volume: 0.4 },
+    bossHurt: { file: "boss-hurt.mp3", volume: 0.5 },
 
-    coin: "coin.mp3",
-    coinWin: "coin-win.mp3",
+    splash: { file: "splash.mp3", volume: 0.7 },
+    bottlePickup: { file: "bottle-clink.mp3", volume: 0.4 },
+    bottleSplash: { file: "bottle-splash.mp3", volume: 0.6 },
 
-    gameOver: "game-over.mp3",
-    victory: "victory.mp3"
+    coin: { file: "coin.mp3", volume: 0.1 },
+    coinWin: { file: "coin-win.mp3", volume: 0.10 },
+
+    gameOver: { file: "game-over.mp3", volume: 0.3 },
+    victory: { file: "victory.mp3", volume: 0.4 }
 };

@@ -4,6 +4,7 @@ class Endboss extends MovableObject {
     y = -30;
     isAttackingNow = false;
     dead = false;
+    hurtSoundCooldown = false;
 
     energy = 100;
     speed = 0;
@@ -58,8 +59,18 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if (this.dead) {
                 this.playAnimation(this.IMAGES_DEAD);
+
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
+                if (!this.hurtSoundCooldown) {
+                    this.hurtSoundCooldown = true;
+
+                    audioManager.playSound("bossHurt");
+                    setTimeout(() => {
+                        this.hurtSoundCooldown = false;
+                    }, 1000);
+                }
+
             } else if (this.isAttackingNow) {
                 this.playAnimation(this.IMAGES_ATTACK);
 
@@ -94,10 +105,13 @@ class Endboss extends MovableObject {
     }
 
     startAttack() {
-        if (!this.isAttackingNow) {
+        if (!this.isAttackingNow && !gameEnded) {
             this.isAttackingNow = true;
+
             setTimeout(() => {
-                this.isAttackingNow = false;
+                if (!gameEnded) {
+                    this.isAttackingNow = false;
+                }
             }, 1000);
         }
     }
@@ -107,16 +121,17 @@ class Endboss extends MovableObject {
     }
 
     hit() {
-        if (this.dead) return;
+        if (this.dead || gameEnded) return;
 
         this.energy -= 20;
-        audioManager.playSound("bossHit");
+
+        audioManager.playSound("bossHurt");
 
         if (this.energy <= 0) {
             this.energy = 0;
             this.dead = true;
 
-            audioManager.playSound("bossDeath");
+            audioManager.playSound("bossAngry", true);
 
             if (!gameEnded) {
                 showEndScreen(true);
