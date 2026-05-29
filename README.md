@@ -95,6 +95,7 @@ Includes small chickens, chicken chicks, and the Endboss with individual behavio
 
 ## Author
 
+Moha Broha
 Developed as part of the Developer Academy training program.
 
 ## License
