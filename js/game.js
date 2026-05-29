@@ -95,6 +95,40 @@ window.onload = () => {
     drawStartScreen();
 };
 
+function bindTouchButton(buttonId, keyName) {
+    const button = document.getElementById(buttonId);
+    if (!button) return;
+
+    const setKey = (value) => {
+        if (!gameStarted || gameEnded || buttonActive) return;
+        keyboard[keyName] = value;
+    };
+
+    button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        setKey(true);
+    });
+    button.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        setKey(false);
+    });
+    button.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        setKey(true);
+    });
+    button.addEventListener('mouseup', (e) => {
+        e.preventDefault();
+        setKey(false);
+    });
+}
+
+window.addEventListener('load', () => {
+    bindTouchButton('leftBtn', 'LEFT');
+    bindTouchButton('rightBtn', 'RIGHT');
+    bindTouchButton('jumpBtn', 'UP');
+    bindTouchButton('throwBtn', 'D');
+});
+
 window.addEventListener("keydown", (e) => {
     if (!gameStarted || gameEnded || buttonActive) return;
 

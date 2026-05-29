@@ -20,6 +20,19 @@ body {
     font-style: normal;
 }
 
+h1 {
+    font-size: 48px;
+    color: rgb(38, 7, 105);
+    text-align: center;
+
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(255, 255, 255, 0.4);
+
+    margin: 10px 0;
+    font-family: "Milonga", serif;
+    letter-spacing: 2px;
+}
+
 #game-container {
     width: 100vw;
     height: 100vh;
@@ -48,6 +61,8 @@ canvas {
     background: transparent;
 }
 
+
+
 #startButton,
 #playAgainBtn {
     position: absolute;
@@ -73,6 +88,7 @@ canvas {
 #playAgainBtn {
     display: none;
 }
+
 
 #fullscreen-btn,
 #mute-btn,
@@ -110,6 +126,8 @@ canvas {
     left: 10px;
 }
 
+
+
 #controls-overlay {
     position: absolute;
     width: 300px;
@@ -120,7 +138,6 @@ canvas {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
-    z-index: 1000;
 }
 
 #controls-overlay.show {
@@ -133,54 +150,12 @@ canvas {
     background: rgba(0, 0, 0, 0.5);
     padding: 45px 40px;
     border-radius: 15px;
-    text-align: left;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     color: white;
     backdrop-filter: blur(6px);
     font-size: large;
 }
 
-#controls-box ul,
-#controls-box ol {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 20px;
-}
 
-
-#close-controls {
-    position: absolute;
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
-    width: 140px;
-    height: 40px;
-    border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    font-family: "Milonga", serif;
-    font-size: 18px;
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition:
-        background-color 0.25s ease,
-        transform 0.2s ease,
-        box-shadow 0.25s ease;
-}
-
-#close-controls:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: translateX(-50%) scale(1.05);
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
-}
-
-#close-controls:active {
-    transform: translateX(-50%) scale(0.95);
-    background-color: rgba(255, 255, 255, 0.3);
-}
 
 .hide-ui {
     opacity: 0;
@@ -193,92 +168,12 @@ canvas {
     opacity: 1 !important;
     pointer-events: all !important;
     transform: translateY(0);
-    transition: opacity 0.4s ease, transform 0.3s ease;
 }
 
-#fade-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    pointer-events: none;
-    z-index: 9998;
-    transition: opacity 0.6s ease;
-}
 
-#fade-layer.active {
-    pointer-events: all;
-}
-
-.fade-out {
-    opacity: 1;
-}
-
-.fade-in {
-    opacity: 0;
-}
-
-#ui-buttons {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    gap: 15px;
-    z-index: 999;
-}
-
-.canvas-btn {
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    padding: 10px 16px;
-    border-radius: 12px;
-    color: white;
-    font-size: 18px;
-    backdrop-filter: blur(6px);
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.canvas-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.55);
-}
-
-.canvas-btn:active {
-    transform: scale(0.95);
-    background: rgba(255, 255, 255, 0.35);
-}
-
-#impressum {
-    background-color: hsla(27, 92%, 42%, 0.502);
-    position: fixed;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 18px;
-    color: black;
-    font-family: "Milonga", serif;
-    padding: 4px 8px;
-    border-radius: 5px;
-    z-index: 9999;
-    text-align: center;
-}
-
-#impressum a {
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-#impressum a:hover {
-    opacity: 0.7;
-}
 
 #touch-buttons {
     display: none;
-
 }
 
 @media screen and (max-width: 1024px) {
@@ -289,24 +184,31 @@ canvas {
         left: 50%;
         transform: translateX(-50%);
         gap: 15px;
-        z-index: 9999;
+        z-index: 999;
     }
+}
+
+.canvas-btn {
+    font-size: 24px;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(62, 136, 9, 0.8);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 #orientation-warning {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: #000;
     color: #fff;
     font-size: 2rem;
-    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 99999;
+    z-index: 999;
     text-align: center;
     padding: 20px;
 }
@@ -321,6 +223,8 @@ canvas {
     }
 }
 
+
+
 @media screen and (orientation: landscape) {
     #orientation-warning {
         display: none;
@@ -329,4 +233,25 @@ canvas {
     #game-container {
         display: flex;
     }
+}
+
+
+
+#impressum {
+    background-color: hsla(27, 92%, 42%, 0.502);
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    color: rgb(38, 7, 105);
+    font-family: "Milonga", serif;
+    padding: 4px 8px;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 999;
+
+
+    text-shadow: 0 1px 2px rgba(243, 228, 228, 0.386),
+        0 0 4px rgba(255, 255, 255, 0.2);
 }
