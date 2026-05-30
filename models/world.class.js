@@ -96,6 +96,7 @@ class World {
             } else if (endboss && endboss.isDead() && !this.endbossDeathTriggered) {
                 this.endbossDeathTriggered = true;
 
+
                 setTimeout(() => {
                     showEndScreen(true);
                 }, 1200);

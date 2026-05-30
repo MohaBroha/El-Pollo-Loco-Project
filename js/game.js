@@ -35,6 +35,7 @@ startScreenImage.src = 'img/img/9_intro_outro_screens/start/startscreen_1.png';
 /** @type {number} */
 let startScreenAnimationId;
 
+
 /**
  * Erstellt ein stoppbares Intervall und speichert dessen ID.
  * @param {Function} fn
@@ -117,8 +118,9 @@ function showEndScreen(won = false) {
     ctx.globalAlpha = 0.75;
 
     const img = new Image();
+
     img.src = won
-        ? 'img/img/You won, you lost/You Won A.png'
+        ? 'img/img/You won, you lost/You Won B.png'
         : 'img/img/You won, you lost/Game Over.png';
 
     img.onload = () => {
