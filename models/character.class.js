@@ -1,25 +1,78 @@
+/**
+ * Hauptspieler-Charakter (Pepe)
+ * Steuert Bewegung, Animationen, Zustände (Jump, Idle, Hurt, Dead) und Interaktionen im Spiel.
+ * Er verarbeitet Keyboard-Input und synchronisiert die Kamera.
+ */
 class Character extends MovableObject {
 
+    /**
+     * Start-Y-Position am Bodenlevel
+     */
     y = 80;
+
+    /**
+     * Höhe der Spielfigur
+     */
     height = 280;
+
+    /**
+     * Breite der Spielfigur
+     */
     width = 150;
+
+    /**
+     * Laufgeschwindigkeit
+     */
     speed = 10;
 
+    /**
+     * Lebensenergie
+     */
     energy = 100;
+
+    /**
+     * Zeitpunkt des letzten Treffers (für Invincibility)
+     */
     lastHitTime = 0;
+
+    /**
+     * Dauer der Unverwundbarkeit nach Treffer (ms)
+     */
     invincibleDuration = 1000;
 
-
-
+    /**
+     * Zeit seit letzter Bewegung (Idle-Tracking)
+     */
     idleTime = 0;
+
+    /**
+     * Zeit bevor Idle-Animation startet (ms)
+     */
     idleDelay = 3000;
 
+    /**
+     * Bewegungsstatus
+     */
     isWalking = false;
+
+    /**
+     * Flag: gerade gestoppt
+     */
     hasJustStopped = false;
 
+    /**
+     * Flag: gerade gelandet
+     */
     hasJustLanded = false;
+
+    /**
+     * Flag: Schnarchsound abgespielt
+     */
     snorePlayed = false;
 
+    /**
+     * Animationsbilder: Laufen
+     */
     IMAGES_WALKING = [
         'img/img/2_character_pepe/2_walk/W-21.png',
         'img/img/2_character_pepe/2_walk/W-22.png',
@@ -29,6 +82,9 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/2_walk/W-26.png'
     ];
 
+    /**
+     * Animationsbilder: Springen
+     */
     IMAGES_JUMPING = [
         'img/img/2_character_pepe/3_jump/J-31.png',
         'img/img/2_character_pepe/3_jump/J-32.png',
@@ -41,6 +97,9 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/3_jump/J-39.png'
     ];
 
+    /**
+     * Animationsbilder: Idle (lang)
+     */
     IMAGES_IDLE_LONG = [
         'img/img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -54,6 +113,9 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/1_idle/long_idle/I-20.png'
     ];
 
+    /**
+     * Animationsbilder: Tod
+     */
     IMAGES_DEAD = [
         'img/img/2_character_pepe/5_dead/D-51.png',
         'img/img/2_character_pepe/5_dead/D-52.png',
@@ -64,13 +126,23 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/5_dead/D-57.png'
     ];
 
+    /**
+     * Animationsbilder: Hurt
+     */
     IMAGES_HURT = [
         'img/img/2_character_pepe/4_hurt/H-41.png',
         'img/img/2_character_pepe/4_hurt/H-42.png',
         'img/img/2_character_pepe/4_hurt/H-43.png'
     ];
 
+    /**
+     * Referenz zur Spielwelt
+     */
     world;
+
+    /**
+     * Gesammelte/mitgeführte Flaschen
+     */
     carryingBottles = [];
 
     constructor() {
@@ -86,6 +158,9 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Haupt-Animations- und Logikloop
+     */
     animate() {
 
         // 🎮 GAME LOGIC LOOP
@@ -108,7 +183,7 @@ class Character extends MovableObject {
             }
 
             // JUMP
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
                 this.jump();
                 moved = true;
                 audioManager.playSound("jump");
@@ -129,7 +204,6 @@ class Character extends MovableObject {
                 this.isWalking = true;
                 this.hasJustStopped = false;
 
-
                 audioManager.stopSound("snore");
 
             } else {
@@ -137,8 +211,6 @@ class Character extends MovableObject {
                 this.isWalking = false;
             }
         }, 1000 / 60);
-
-
 
         setInterval(() => {
 
@@ -195,8 +267,9 @@ class Character extends MovableObject {
         }, 100);
     }
 
-
-    // 🚶 WALK SOUND CONTROL (ANTI-SPAM)
+    /**
+     * Geh-Sound Steuerung
+     */
     handleWalkSound() {
         if (!this.isWalking) {
             this.isWalking = true;
@@ -204,6 +277,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Wirft eine Flasche
+     */
     throwBottle() {
         if (this.carryingBottles.length <= 0) return null;
 
@@ -214,6 +290,9 @@ class Character extends MovableObject {
         return bottle;
     }
 
+    /**
+     * Trefferlogik
+     */
     hit() {
         const now = Date.now();
 
@@ -233,10 +312,16 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Prüft ob tot
+     */
     isDead() {
         return this.energy <= 0;
     }
 
+    /**
+     * Prüft ob verletzt
+     */
     isHurt() {
         return Date.now() - this.lastHitTime < this.invincibleDuration;
     }

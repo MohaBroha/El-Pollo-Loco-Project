@@ -1,7 +1,10 @@
+/** @type {Level} */
 let level1;
 
-
-
+/**
+ * Initialisiert Level 1 mit Gegnern, Wolken, Hintergrund, Münzen und Flaschen.
+ * Erstellt die komplette Spielwelt-Konfiguration.
+ */
 function initLevel() {
     level1 = new Level(
         [
@@ -12,7 +15,6 @@ function initLevel() {
             new Chicken(1500),
             new Chicken(2900),
 
-
             new SmallChicken(800),
             new SmallChicken(),
             new SmallChicken(600),
@@ -21,7 +23,6 @@ function initLevel() {
             new SmallChicken(1600),
 
             new Endboss(3600)
-
         ],
 
         [
@@ -89,4 +90,4 @@ function initLevel() {
 
         PickupBottle.generateBottles(200, 720 * 7)
     );
-} 
+}

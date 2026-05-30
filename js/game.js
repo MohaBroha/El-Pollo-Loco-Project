@@ -1,25 +1,55 @@
+/**
+ * Canvas Rendering-Kontext.
+ * @type {HTMLCanvasElement}
+ */
 let canvas;
-let ctx;
-let world;
-let keyboard = new Keyboard();
-let gameStarted = false;
-let gameEnded = false;
-let allIntervals = [];
-let endScreenShown = false; // guard to prevent multiple end-screen triggers
 
+/** @type {CanvasRenderingContext2D} */
+let ctx;
+
+/** @type {World} */
+let world;
+
+/** @type {Keyboard} */
+let keyboard = new Keyboard();
+
+/** @type {boolean} */
+let gameStarted = false;
+
+/** @type {boolean} */
+let gameEnded = false;
+
+/** @type {number[]} */
+let allIntervals = [];
+
+/** @type {boolean} */
+let endScreenShown = false; // Schutz, um mehrfaches Anzeigen des Endscreens zu verhindern
+
+/** @type {AudioManager} */
 const audioManager = new AudioManager();
 
+/** @type {HTMLImageElement} */
 let startScreenImage = new Image();
 startScreenImage.src = 'img/img/9_intro_outro_screens/start/startscreen_1.png';
 
+/** @type {number} */
 let startScreenAnimationId;
 
+/**
+ * Erstellt ein stoppbares Intervall und speichert dessen ID.
+ * @param {Function} fn
+ * @param {number} time
+ * @returns {number}
+ */
 function setStoppableInterval(fn, time) {
     let id = setInterval(fn, time);
     allIntervals.push(id);
     return id;
 }
 
+/**
+ * Zeichnet den animierten Startbildschirm.
+ */
 function drawStartScreen() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
@@ -27,6 +57,9 @@ function drawStartScreen() {
     startScreenAnimationId = requestAnimationFrame(drawStartScreen);
 }
 
+/**
+ * Initialisiert die Spielwelt und das Canvas.
+ */
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
@@ -40,6 +73,9 @@ function init() {
     gameEnded = false;
 }
 
+/**
+ * Startet das Spiel neu und setzt alle Zustände zurück.
+ */
 function restartGame() {
     gameEnded = false;
     endScreenShown = false;
@@ -64,8 +100,11 @@ function restartGame() {
     gameStarted = true;
 }
 
+/**
+ * Zeigt den Endscreen (Gewonnen oder Verloren).
+ * @param {boolean} [won=false]
+ */
 function showEndScreen(won = false) {
-    // prevent multiple invocations playing the sound twice
     if (endScreenShown) return;
     endScreenShown = true;
 
@@ -89,12 +128,20 @@ function showEndScreen(won = false) {
     };
 }
 
+/**
+ * Einstiegspunkt nach dem Laden der Seite.
+ */
 window.onload = () => {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     drawStartScreen();
 };
 
+/**
+ * Bindet Touch- und Maussteuerung an den Keyboard-Status.
+ * @param {string} buttonId
+ * @param {string} keyName
+ */
 function bindTouchButton(buttonId, keyName) {
     const button = document.getElementById(buttonId);
     if (!button) return;
@@ -129,6 +176,9 @@ window.addEventListener('load', () => {
     bindTouchButton('throwBtn', 'D');
 });
 
+/**
+ * Keyboard Keydown-Handler.
+ */
 window.addEventListener("keydown", (e) => {
     if (!gameStarted || gameEnded || buttonActive) return;
 
@@ -142,6 +192,9 @@ window.addEventListener("keydown", (e) => {
     }
 });
 
+/**
+ * Keyboard Keyup-Handler.
+ */
 window.addEventListener("keyup", (e) => {
     if (!gameStarted || gameEnded || buttonActive) return;
 

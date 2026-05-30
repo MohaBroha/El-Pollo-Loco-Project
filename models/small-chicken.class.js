@@ -1,18 +1,44 @@
+/**
+ * SmallChicken ist ein kleiner Gegner im Spiel.
+ * Er bewegt sich automatisch nach links und spielt eine Laufanimation.
+ * Beim Tod wird er deaktiviert und zeigt ein Todesbild.
+ */
 class SmallChicken extends MovableObject {
+
+    /**
+     * Größe und Position des kleinen Huhns
+     */
     height = 50;
     width = 50;
     y = 380;
+
+    /**
+     * Lebensenergie des Gegners
+     */
     energy = 100;
+
+    /**
+     * Status ob das Huhn tot ist
+     */
     dead = false;
 
+    /**
+     * Animationsbilder für die Laufbewegung
+     */
     IMAGES_WALKING = [
         'img/img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
         'img/img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
         'img/img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ];
 
+    /**
+     * Sound der beim Tod abgespielt wird
+     */
     deathSound = "chickenSmall";
 
+    /**
+     * Initialisiert das SmallChicken und setzt Position, Geschwindigkeit und Animation.
+     */
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -22,6 +48,9 @@ class SmallChicken extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Startet Bewegungs- und Animationsintervalle.
+     */
     animate() {
         setInterval(() => {
             if (this.isDead()) return;
@@ -35,6 +64,10 @@ class SmallChicken extends MovableObject {
         }, 140);
     }
 
+    /**
+     * Wird aufgerufen wenn das Huhn Schaden bekommt.
+     * Setzt Energie auf 0 und aktiviert Todeszustand.
+     */
     hit() {
         this.energy -= 100;
         if (this.energy <= 0) {
@@ -46,6 +79,11 @@ class SmallChicken extends MovableObject {
         }
     }
 
+    /**
+     * Prüft ob das Huhn tot ist.
+     *
+     * @returns {boolean} true wenn tot
+     */
     isDead() {
         return this.dead;
     }

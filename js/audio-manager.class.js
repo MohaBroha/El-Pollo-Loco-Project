@@ -1,22 +1,40 @@
+/**
+ * AudioManager (Singleton)
+ * Verwaltet alle Spiel-Sounds und Hintergrundmusik.
+ * Kontrolliert Mute, Lautstärke, Sound-Locks und Verhalten bei Spielende.
+ */
 class AudioManager {
     constructor() {
         if (AudioManager.instance) return AudioManager.instance;
 
+        /** @type {HTMLAudioElement|null} */
         this.music = null;
+
+        /** @type {boolean} */
         this.muted = false;
+
+        /** @type {number} */
         this.volume = 1;
 
+        /** @type {{name: string, audio: HTMLAudioElement}[]} */
         this.activeSounds = [];
+
+        /** @type {Object<string, boolean>} */
         this.soundLocks = {};
 
-        // 🎮 GAME STATE CONTROL
+        // 🎮 SPIELSTATUS-KONTROLLE
+
+        /** @type {boolean} */
         this.gameEnded = false;
 
         AudioManager.instance = this;
     }
 
-
-
+    /**
+     * Spielt einen Soundeffekt ab.
+     * @param {string} name - Sound-Schlüssel aus AUDIO_LIBRARY
+     * @param {boolean} [force=false] - Ignoriert Locks und Spielstatus, falls true
+     */
     playSound(name, force = false) {
         if (this.muted) return;
 
@@ -29,7 +47,7 @@ class AudioManager {
         const entry = AUDIO_LIBRARY[name];
         if (!entry) return;
 
-        // 🔒 LOCK erst NACH Validierung
+        // 🔒 Lock erst nach Validierung
         if (!force && this.soundLocks[name]) return;
 
         this.soundLocks[name] = true;
@@ -57,11 +75,19 @@ class AudioManager {
         this.activeSounds.push({ name, audio });
     }
 
+    /**
+     * Entfernt einen beendeten Sound aus der aktiven Liste.
+     * @private
+     */
     _removeActiveSound(audio) {
         this.activeSounds = this.activeSounds.filter(item => item.audio !== audio);
     }
 
-    // 🎵 MUSIC
+    /**
+     * Spielt Hintergrundmusik ab.
+     * @param {string} name - Musik-Schlüssel aus AUDIO_LIBRARY
+     * @param {boolean} [loop=true]
+     */
     playMusic(name, loop = true) {
         if (this.gameEnded) return;
 
@@ -88,7 +114,9 @@ class AudioManager {
         this.music.play().catch(() => { });
     }
 
-    // 🧹 STOP ALL AUDIO
+    /**
+     * Stoppt alle Audio-Ausgaben (Musik + Sounds).
+     */
     stopAll() {
         this.stopMusic();
 
@@ -100,6 +128,9 @@ class AudioManager {
         this.activeSounds = [];
     }
 
+    /**
+     * Stoppt die Hintergrundmusik.
+     */
     stopMusic() {
         if (!this.music) return;
 
@@ -107,6 +138,10 @@ class AudioManager {
         this.music.currentTime = 0;
     }
 
+    /**
+     * Setzt den Spiel-Ende-Zustand.
+     * @param {boolean} state
+     */
     setGameEnded(state) {
         this.gameEnded = state;
         if (state) {
@@ -114,6 +149,10 @@ class AudioManager {
         }
     }
 
+    /**
+     * Stoppt einen bestimmten Sound anhand seines Namens.
+     * @param {string} name
+     */
     stopSound(name) {
         const soundsToStop = this.activeSounds.filter(item => item.name === name);
         if (soundsToStop.length === 0) return;
@@ -126,7 +165,10 @@ class AudioManager {
         this.activeSounds = this.activeSounds.filter(item => item.name !== name);
     }
 
-    // 🔇 MUTE SYSTEM
+    /**
+     * Aktiviert oder deaktiviert Mute.
+     * @param {boolean} state
+     */
     toggleMute(state) {
         this.muted = state;
 
@@ -134,6 +176,9 @@ class AudioManager {
         else this.unmuteAll();
     }
 
+    /**
+     * Stummschalten aller Sounds.
+     */
     muteAll() {
         this.muted = true;
 
@@ -146,6 +191,9 @@ class AudioManager {
         });
     }
 
+    /**
+     * Hebt Stummschaltung auf und setzt Audio fort.
+     */
     unmuteAll() {
         this.muted = false;
 
@@ -158,7 +206,10 @@ class AudioManager {
         });
     }
 
-    // 🔊 VOLUME CONTROL
+    /**
+     * Setzt die globale Lautstärke für alle Audioquellen.
+     * @param {number} value
+     */
     setVolume(value) {
         this.volume = value;
 

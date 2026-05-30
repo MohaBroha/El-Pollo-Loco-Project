@@ -1,3 +1,9 @@
+/**
+ * Repräsentiert die komplette Spielwelt.
+ * Verwaltet Rendering, Kollisionen, Gegner,
+ * Sammelobjekte, Statusleisten und Spiellogik.
+ */
+
 class World {
 
     character = new Character();
@@ -22,6 +28,13 @@ class World {
     lastThrowTime = 0;
     throwCooldown = 500;
 
+    /**
+     * Erstellt eine neue Spielwelt.
+     *
+     * @param {HTMLCanvasElement} canvas Das Canvas-Element des Spiels.
+     * @param {Keyboard} keyboard Die Tastatursteuerung des Spielers.
+     */
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -44,10 +57,21 @@ class World {
         this.run();
     }
 
+    /**
+ * Verknüpft den Charakter mit der aktuellen Spielwelt
+ * und startet dessen Animationen.
+ */
+
     setWorld() {
         this.character.world = this;
         this.character.animate();
     }
+
+    /**
+ * Startet die Hauptlogik der Spielwelt.
+ * Führt Kollisionen, Würfe und Sammelprüfungen
+ * in regelmäßigen Intervallen aus.
+ */
 
     run() {
         setStoppableInterval(() => {
@@ -79,14 +103,26 @@ class World {
         }, 1000 / 60);
     }
 
+    /**
+ * Startet die Hintergrundmusik des Spiels.
+ */
+
     startBackgroundMusic() {
         audioManager.playMusic("bgMusic", true);
     }
+
+    /**
+ * Aktualisiert die Lebensanzeige des Endbosses.
+ */
 
     updateEndbossStatusBar() {
         let endboss = this.level.enemies.find(e => e instanceof Endboss);
         if (endboss) this.endbossStatusBar.setPercentage(endboss.energy);
     }
+
+    /**
+ * Prüft das Einsammeln von Münzen.
+ */
 
     checkCoinPickup() {
         this.coins.forEach(coin => {
@@ -98,6 +134,10 @@ class World {
             }
         });
     }
+
+    /**
+ * Prüft das Einsammeln von Flaschen.
+ */
 
     checkBottlePickup() {
         this.throwableObjectsOnGround.forEach((bottle, index) => {
@@ -112,6 +152,10 @@ class World {
         });
     }
 
+    /**
+ * Prüft das Werfen von Flaschen.
+ */
+
     checkThrowObjects() {
         const now = new Date().getTime();
         if (this.keyboard.D && this.character.carryingBottles.length > 0 &&
@@ -125,6 +169,10 @@ class World {
             }
         }
     }
+
+    /**
+ * Prüft Kollisionen zwischen werfbaren Objekten und anderen Spielobjekten.
+ */
 
     checkThrowableObjectCollisions() {
         this.throwableObjects.forEach(bottle => {
@@ -153,6 +201,11 @@ class World {
         this.throwableObjects = this.throwableObjects.filter(b => !b.toRemove);
     }
 
+    /**
+     * Prüft Kollisionen zwischen dem Charakter und Gegnern.
+     * Handhabt Treffer von oben und seitlichen Berührungen.
+     */
+
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
 
@@ -176,6 +229,14 @@ class World {
         });
     }
 
+    /**
+     * Prüft die Kollision zweier Objekte anhand ihrer Hitboxen.
+     *
+     * @param {Object} obj1 Erstes Objekt.
+     * @param {Object} obj2 Zweites Objekt.
+     * @returns {boolean} True, wenn eine Kollision vorliegt.
+     */
+
     checkCollision(obj1, obj2) {
         const o1 = obj1.offset || { top: 0, bottom: 0, left: 0, right: 0 };
         const o2 = obj2.offset || { top: 0, bottom: 0, left: 0, right: 0 };
@@ -192,6 +253,11 @@ class World {
 
         return left1 < right2 && right1 > left2 && top1 < bottom2 && bottom1 > top2;
     }
+
+    /**
+    * Rendert die komplette Spielwelt inklusive
+    * Hintergrund, Gegner, Sammelobjekte und UI.
+    */
 
     draw() {
         if (gameEnded) return;
@@ -228,10 +294,22 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Fügt mehrere Objekte zur Zeichenroutine hinzu.
+     *
+     * @param {Array} objects Liste der zu zeichnenden Objekte.
+     */
+
     addobjectstoMap(objects) {
         if (!objects) return;
         objects.forEach(o => this.addtoMap(o));
     }
+
+    /**
+ * Zeichnet ein einzelnes Objekt auf das Canvas.
+ *
+ * @param {Object} mo Das zu zeichnende Objekt.
+ */
 
     addtoMap(mo) {
         if (!mo) return;
@@ -241,12 +319,24 @@ class World {
         if (mo.otherDirection !== undefined && mo.otherDirection) this.flipImageBack(mo);
     }
 
+    /**
+ * Spiegelt ein Objekt horizontal.
+ *
+ * @param {Object} mo Das zu spiegelnde Objekt.
+ */
+
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * -1;
     }
+
+    /**
+ * Setzt die Spiegelung eines Objekts zurück.
+ *
+ * @param {Object} mo Das gespiegelte Objekt.
+ */
 
     flipImageBack(mo) {
         mo.x = mo.x * -1;

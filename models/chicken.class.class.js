@@ -1,11 +1,37 @@
+/**
+ * Chicken ist ein einfacher Gegner im Spiel.
+ * Er bewegt sich automatisch nach links und kann vom Spieler besiegt werden.
+ */
 class Chicken extends MovableObject {
 
+    /**
+     * Höhe des Huhns
+     */
     height = 70;
+
+    /**
+     * Breite des Huhns
+     */
     width = 70;
+
+    /**
+     * Y-Position am Boden
+     */
     y = 350;
+
+    /**
+     * Lebensenergie
+     */
     energy = 100;
+
+    /**
+     * Todesstatus
+     */
     dead = false;
 
+    /**
+     * Animationsbilder für Laufbewegung
+     */
     IMAGES_WALKING = [
         'img/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         'img/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
@@ -24,6 +50,9 @@ class Chicken extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Startet Bewegung und Animation des Huhns
+     */
     animate() {
         setInterval(() => {
             if (this.isDead()) return;
@@ -37,6 +66,9 @@ class Chicken extends MovableObject {
         }, 160);
     }
 
+    /**
+     * Nimmt Schaden und setzt ggf. Todeszustand
+     */
     hit() {
         this.energy -= 100;
         if (this.energy <= 0) {
@@ -47,6 +79,9 @@ class Chicken extends MovableObject {
         }
     }
 
+    /**
+     * Prüft ob das Huhn tot ist
+     */
     isDead() {
         return this.dead;
     }

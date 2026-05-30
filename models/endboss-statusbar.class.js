@@ -1,5 +1,12 @@
+/**
+ * StatusBar für den Endboss.
+ * Zeigt die aktuelle Lebensenergie visuell als Balken an.
+ */
 class EndbossStatusBar extends DrawableObject {
 
+    /**
+     * Bildvarianten für die Statusanzeige (0% - 100%)
+     */
     IMAGES = [
         'img/img/7_statusbars/2_statusbar_endboss/blue/blue0.png',
         'img/img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
@@ -9,6 +16,9 @@ class EndbossStatusBar extends DrawableObject {
         'img/img/7_statusbars/2_statusbar_endboss/blue/blue100.png'
     ];
 
+    /**
+     * Aktueller Prozentwert der Boss-Gesundheit
+     */
     percentage = 100;
 
     constructor() {
@@ -21,12 +31,18 @@ class EndbossStatusBar extends DrawableObject {
         this.setPercentage(100);
     }
 
+    /**
+     * Setzt den aktuellen Prozentwert und aktualisiert das Bild
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Berechnet das passende Bild basierend auf Prozentwert
+     */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;

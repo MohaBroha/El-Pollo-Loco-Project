@@ -1,3 +1,9 @@
+/**
+ * Repräsentiert eine werfbare Salsa-Flasche.
+ * Die Flasche rotiert während des Flugs,
+ * kann auf dem Boden oder an Gegnern zerschellen
+ * und spielt entsprechende Animationen und Sounds ab.
+ */
 class ThrowableObject extends MovableObject {
     width = 60;
     height = 70;
@@ -30,6 +36,13 @@ class ThrowableObject extends MovableObject {
     hit = false;
     toRemove = false;
 
+    /**
+     * Erstellt ein neues Wurfobjekt.
+     *
+     * @param {number} x X-Position der Flasche.
+     * @param {number} y Y-Position der Flasche.
+     * @param {boolean} [otherDirection=false] Gibt an, ob die Flasche nach links geworfen wird.
+     */
     constructor(x, y, otherDirection = false) {
         super();
         this.x = x;
@@ -45,6 +58,10 @@ class ThrowableObject extends MovableObject {
         this.animateRotation();
     }
 
+    /**
+     * Aktualisiert die Flugbewegung der Flasche.
+     * Berechnet Flugbahn und Position während des Wurfs.
+     */
     update() {
         if (this.toRemove) return;
 
@@ -52,14 +69,16 @@ class ThrowableObject extends MovableObject {
             this.y -= this.speedY;
             this.speedY -= this.acceleration;
             this.x += this.speed;
-
         }
-
     }
 
+    /**
+     * Startet die Rotationsanimation der Flasche während des Flugs.
+     */
     animateRotation() {
         let currentFrame = 0;
         const frameCount = this.rotationImages.length;
+
         this.rotationInterval = setInterval(() => {
             if (!this.hit) {
                 this.img = this.imageCache[this.rotationImages[currentFrame]];
@@ -70,36 +89,60 @@ class ThrowableObject extends MovableObject {
         }, 120);
     }
 
+    /**
+     * Wird aufgerufen, wenn die Flasche einen Gegner trifft.
+     * Stoppt die Rotation, spielt Sound und Splash-Animation.
+     */
     hitEnemy() {
         if (this.hit) return;
+
         this.hit = true;
         clearInterval(this.rotationInterval);
+
         audioManager.playSound(this.enemyHitSound);
+
         this.playSplashAnimation(() => {
             this.toRemove = true;
         });
     }
 
+    /**
+     * Wird aufgerufen, wenn die Flasche den Boden berührt.
+     * Stoppt die Rotation, spielt Sound und Splash-Animation.
+     */
     hitGround() {
         if (this.hit) return;
+
         this.hit = true;
         clearInterval(this.rotationInterval);
+
         audioManager.playSound(this.splashSound);
+
         this.playSplashAnimation(() => {
             this.toRemove = true;
         });
     }
 
+    /**
+     * Spielt die Splash-Animation der zerbrechenden Flasche ab.
+     *
+     * @param {Function} doneCallback Callback-Funktion,
+     * die nach Abschluss der Animation ausgeführt wird.
+     */
     playSplashAnimation(doneCallback) {
         let currentFrame = 0;
         const frameCount = this.splashImages.length;
+
         const animateSplash = setInterval(() => {
             if (currentFrame < frameCount) {
                 this.img = this.imageCache[this.splashImages[currentFrame]];
                 currentFrame++;
             } else {
                 clearInterval(animateSplash);
-                if (doneCallback) doneCallback();
+
+                if (doneCallback) {
+                    doneCallback();
+                }
             }
         }, 100);
     }

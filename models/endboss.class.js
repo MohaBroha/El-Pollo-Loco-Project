@@ -1,12 +1,28 @@
+/**
+ * Endboss ist der finale Gegner im Spiel.
+ * Er besitzt mehrere Zustände (walk, attack, hurt, dead) und komplexe KI-Logik.
+ * Steuert Animation, Bewegung, Angriff und Schadenverhalten.
+ */
 class Endboss extends MovableObject {
+
+    /**
+     * Größe und Position im Spiel
+     */
     height = 500;
     width = 300;
     y = -30;
+
+    /**
+     * Status-Flags
+     */
     isAttackingNow = false;
     dead = false;
     hurtSoundCooldown = false;
     currentState = null;
 
+    /**
+     * Animationsgeschwindigkeit pro Zustand
+     */
     animationIntervals = {
         walk: 260,
         attack: 260,
@@ -14,6 +30,9 @@ class Endboss extends MovableObject {
         dead: 200
     };
 
+    /**
+     * Zeitstempel der letzten Frame-Updates
+     */
     _lastAnimTimestamps = {
         walk: 0,
         attack: 0,
@@ -21,6 +40,9 @@ class Endboss extends MovableObject {
         dead: 0
     };
 
+    /**
+     * Frame-Indizes für Animationen
+     */
     _frameIndices = {
         walk: 0,
         attack: 0,
@@ -28,13 +50,26 @@ class Endboss extends MovableObject {
         dead: 0
     };
 
+    /**
+     * Lebensenergie
+     */
     energy = 100;
+
+    /**
+     * Bewegungsgeschwindigkeit
+     */
     speed = 0;
 
+    /**
+     * Angriffsteuerung
+     */
     attackCooldown = 280;
     attackDuration = 320;
     lastAttackTime = 0;
 
+    /**
+     * Walking Animation Frames
+     */
     IMAGES_WALKING = [
         'img/img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -48,9 +83,11 @@ class Endboss extends MovableObject {
         'img/img/4_enemie_boss_chicken/1_walk/G2.png',
         'img/img/4_enemie_boss_chicken/1_walk/G3.png',
         'img/img/4_enemie_boss_chicken/1_walk/G4.png',
-
     ];
 
+    /**
+     * Attack Animation Frames
+     */
     IMAGES_ATTACK = [
         'img/img/4_enemie_boss_chicken/3_attack/G13.png',
         'img/img/4_enemie_boss_chicken/3_attack/G14.png',
@@ -62,12 +99,18 @@ class Endboss extends MovableObject {
         'img/img/4_enemie_boss_chicken/3_attack/G20.png'
     ];
 
+    /**
+     * Hurt Animation Frames
+     */
     IMAGES_HURT = [
         'img/img/4_enemie_boss_chicken/4_hurt/G21.png',
         'img/img/4_enemie_boss_chicken/4_hurt/G22.png',
         'img/img/4_enemie_boss_chicken/4_hurt/G23.png'
     ];
 
+    /**
+     * Death Animation Frames
+     */
     IMAGES_DEAD = [
         'img/img/4_enemie_boss_chicken/5_dead/G24.png',
         'img/img/4_enemie_boss_chicken/5_dead/G25.png',
@@ -86,13 +129,18 @@ class Endboss extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Zeichnet den Boss mit Offset je nach Zustand
+     */
     draw(ctx) {
         const offsetY = (this.currentState === 'walk' || this.currentState === 'attack') ? 20 : 0;
         ctx.drawImage(this.img, this.x, this.y + offsetY, this.width, this.height);
     }
 
+    /**
+     * Hauptanimations- und KI-Loop
+     */
     animate() {
-
 
         setInterval(() => {
 
@@ -181,7 +229,6 @@ class Endboss extends MovableObject {
 
         }, 60);
 
-
         setInterval(() => {
             if (!this.world || !this.world.character || this.dead) return;
 
@@ -222,6 +269,9 @@ class Endboss extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Startet Angriff
+     */
     startAttack() {
         const now = Date.now();
         if (this.dead || gameEnded) return;
@@ -242,6 +292,9 @@ class Endboss extends MovableObject {
         return super.isHurt();
     }
 
+    /**
+     * Nimmt Schaden
+     */
     hit() {
         if (this.dead || gameEnded) return;
 
@@ -260,10 +313,12 @@ class Endboss extends MovableObject {
             this.currentImage = 0;
 
             audioManager.playSound("bossAngry", true);
-
         }
     }
 
+    /**
+     * Prüft ob Boss tot ist
+     */
     isDead() {
         return this.dead;
     }

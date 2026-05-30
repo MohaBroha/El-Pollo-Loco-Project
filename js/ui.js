@@ -1,15 +1,37 @@
+/** @type {HTMLButtonElement} */
 const startBtn = document.getElementById('startButton');
+
+/** @type {HTMLButtonElement} */
 const playAgainBtn = document.getElementById('playAgainBtn');
+
+/** @type {HTMLButtonElement} */
 const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+/** @type {HTMLButtonElement} */
 const muteBtn = document.getElementById('mute-btn');
+
+/** @type {HTMLButtonElement} */
 const infoBtn = document.getElementById('info-btn');
+
+/** @type {HTMLElement} */
 const controlsOverlay = document.getElementById('controls-overlay');
 
+/** @type {HTMLElement[]} */
 let uiButtons = [fullscreenBtn, muteBtn, infoBtn];
+
+/** @type {number} */
 let uiTimeout;
+
+/** @type {boolean} */
 let muted = false;
+
+/** @type {boolean} */
 let buttonActive = false;
 
+/**
+ * Entfernt den Fokus von einem Button-Element.
+ * @param {HTMLButtonElement} btn - Der Button, der den Fokus verlieren soll.
+ */
 function removeFocus(btn) {
     btn.blur();
 }
@@ -88,6 +110,9 @@ document.addEventListener('mousemove', () => {
     if (document.fullscreenElement) showUI();
 });
 
+/**
+ * Zeigt UI-Buttons im Vollbildmodus an.
+ */
 function showUI() {
     uiButtons.forEach(btn => btn.classList.add('show-ui'));
     uiButtons.forEach(btn => btn.classList.remove('hide-ui'));
@@ -95,6 +120,9 @@ function showUI() {
     uiTimeout = setTimeout(hideUI, 2000);
 }
 
+/**
+ * Versteckt UI-Buttons im Vollbildmodus.
+ */
 function hideUI() {
     if (!document.fullscreenElement) return;
     uiButtons.forEach(btn => btn.classList.add('hide-ui'));
