@@ -47,9 +47,13 @@ h1 {
 }
 
 a,
-button,
 li {
     color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+button {
+    color: #0b06a1;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
@@ -63,17 +67,19 @@ a:hover {
 
 #game-container {
     width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    min-height: 100vh;
-    min-width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
+    /* Use dynamic viewport height on supporting browsers, fallback to 100vh */
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    min-height: auto;
+    min-width: auto;
 }
 
 #startContainer {
@@ -92,9 +98,9 @@ canvas {
     border-radius: 20px;
     box-shadow: inset 0 0 110px rgba(98, 199, 9, 0.3);
     background: transparent;
+    /* Prevent canvas from being clipped or distorted */
+    object-fit: contain;
 }
-
-
 
 #startButton,
 #playAgainBtn {
@@ -102,14 +108,15 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2rem;
-    padding: 15px 30px;
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
     cursor: pointer;
     z-index: 20;
     background-color: rgba(62, 136, 9, 0.8);
     border: 2px solid #b2c509;
     border-radius: 10px;
     transition: background 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
 }
 
 #startButton:hover,
@@ -122,13 +129,12 @@ canvas {
     display: none;
 }
 
-
 #fullscreen-btn,
 #mute-btn,
 #info-btn {
     position: absolute;
-    padding: 10px;
-    font-size: 30px;
+    padding: clamp(4px, 1.5vw, 10px);
+    font-size: clamp(20px, 5vw, 30px);
     border: none;
     background: transparent;
     color: white;
@@ -137,6 +143,8 @@ canvas {
     z-index: 1100;
     pointer-events: auto;
     transition: background 0.2s ease, opacity 0.3s ease, transform 0.3s ease;
+    line-height: 1;
+    /* Ensure buttons stay above canvas */
 }
 
 #fullscreen-btn:hover,
@@ -146,18 +154,18 @@ canvas {
 }
 
 #info-btn {
-    top: 10px;
-    right: 10px;
+    top: clamp(4px, 1.5vw, 10px);
+    right: clamp(4px, 1.5vw, 10px);
 }
 
 #fullscreen-btn {
-    bottom: 0px;
-    right: 10px;
+    bottom: clamp(2px, 1vw, 6px);
+    right: clamp(4px, 1.5vw, 10px);
 }
 
 #mute-btn {
-    bottom: 0px;
-    left: 10px;
+    bottom: clamp(2px, 1vw, 6px);
+    left: clamp(4px, 1.5vw, 10px);
 }
 
 #impressum {
@@ -168,9 +176,9 @@ canvas {
     transform: translateX(-50%);
     width: min(92%, 700px);
     max-width: 92%;
-    font-size: 18px;
+    font-size: clamp(12px, 2.5vw, 18px);
     font-family: "Milonga", serif;
-    padding: 10px 14px;
+    padding: clamp(6px, 1.5vw, 10px) clamp(10px, 2vw, 14px);
     border-radius: 14px;
     text-align: center;
     z-index: 900;
@@ -182,13 +190,13 @@ canvas {
     pointer-events: auto;
 }
 
+/* Remove old conflicting mobile rules that hide buttons */
 @media screen and (max-width: 600px) {
 
     #fullscreen-btn,
     #mute-btn,
     #info-btn {
-        bottom: 0px;
-        display: none;
+        display: flex;
     }
 }
 
@@ -219,8 +227,6 @@ canvas {
     font-size: large;
 }
 
-
-
 .hide-ui {
     opacity: 0;
     pointer-events: none;
@@ -234,40 +240,110 @@ canvas {
     transform: translateY(0);
 }
 
-
 #touch-buttons {
     display: none;
 }
 
+/* Show touch buttons on mobile/tablet sizes */
 @media screen and (max-width: 1024px) {
     #touch-buttons {
         display: flex;
         position: absolute;
-        bottom: 16px;
-        left: 50%;
-        transform: translateX(-50%);
-        gap: 15px;
-        z-index: 1100;
-        pointer-events: auto;
+        bottom: 50px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 0 clamp(12px, 4vw, 24px);
+        z-index: 1090;
+        pointer-events: none;
+        flex-wrap: nowrap;
+    }
+
+    /* Reorder buttons: LEFT group first, RIGHT group last */
+    #leftBtn {
+        order: 1;
+    }
+
+    #rightBtn {
+        order: 2;
+        margin-right: auto;
+    }
+
+    #jumpBtn {
+        order: 3;
+    }
+
+    #throwBtn {
+        order: 4;
+    }
+
+    /* Push fullscreen/mute buttons to sit above touch buttons */
+    #fullscreen-btn {
+        bottom: clamp(2px, 1vw, 6px);
+        z-index: 1110;
+    }
+
+    #mute-btn {
+        bottom: clamp(2px, 1vw, 6px);
+        z-index: 1110;
     }
 }
 
 @media screen and (max-width: 600px) {
     #touch-buttons {
-        display: none;
+        display: flex;
+        bottom: clamp(44px, 8vh, 50px);
+        padding: 0 clamp(10px, 4vw, 16px);
+    }
+
+    #fullscreen-btn {
+        bottom: 2px;
+        z-index: 1110;
+    }
+
+    #mute-btn {
+        bottom: 2px;
+        z-index: 1110;
     }
 }
 
+@media screen and (max-width: 480px) {
+    #touch-buttons {
+        bottom: 40px;
+        padding: 0 8px;
+    }
+
+    .canvas-btn {
+        gap: 4px;
+    }
+}
+
+/* Base button styling */
 .canvas-btn {
-    font-size: 24px;
-    padding: 15px 20px;
+    pointer-events: auto;
+    font-size: clamp(16px, 4vw, 24px);
+    padding: clamp(8px, 2vw, 15px) clamp(10px, 2.5vw, 20px);
+    margin: 0 2px;
     border: none;
     border-radius: 10px;
     background-color: rgba(62, 136, 9, 0.8);
     color: white;
     cursor: pointer;
-    z-index: 1100;
+    z-index: 1090;
     transition: background-color 0.2s ease, transform 0.2s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+/* Smaller touch button text on very small screens */
+@media screen and (max-width: 400px) {
+    .canvas-btn {
+        font-size: 14px;
+        padding: 6px 8px;
+    }
 }
 
 #game-container,
@@ -283,6 +359,7 @@ canvas {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
+/* ===== ORIENTATION WARNING ===== */
 #orientation-warning {
     display: none;
     position: fixed;
@@ -294,15 +371,24 @@ canvas {
     height: 100%;
     background: #000;
     color: #fff;
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 5vw, 2rem);
     justify-content: center;
     align-items: center;
-    z-index: 1200;
     text-align: center;
     padding: 20px;
     flex-direction: column;
     margin: 0;
     overflow: hidden;
+    gap: 16px;
+}
+
+/* Add a subtitle hint for better spacing */
+#orientation-warning::after {
+    content: "Landscape mode recommended for best experience";
+    display: block;
+    font-size: clamp(0.7rem, 2.5vw, 1rem);
+    opacity: 0.7;
+    margin-top: 8px;
 }
 
 @media screen and (orientation: portrait) and (max-width: 1024px) {
@@ -314,16 +400,50 @@ canvas {
         display: none;
     }
 
+    /* Keep impressum visible at bottom of orientation screen */
+    #impressum {
+        display: block !important;
+        position: fixed;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1300;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+        font-size: clamp(12px, 2.5vw, 18px);
+        padding: clamp(6px, 1.5vw, 10px) clamp(10px, 2vw, 14px);
+        width: min(92%, 700px);
+        max-width: 92%;
+        text-align: center;
+        line-height: 1.4;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+        pointer-events: auto;
+    }
 }
 
+/* Landscape: show game, show impressum with proper spacing */
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     #impressum {
         bottom: 80px;
         background-color: transparent;
+        font-size: clamp(10px, 2vw, 14px);
+        padding: 6px 10px;
+        width: min(90%, 600px);
+    }
+
+    #game-container {
+        display: flex;
+        height: calc(100vh - 100px);
+        height: calc(100dvh - 100px);
+    }
+
+    h1 {
+        font-size: clamp(20px, 4vw, 32px);
+        margin: 4px 0;
     }
 }
-
-
 
 @media screen and (orientation: landscape) {
     #orientation-warning {
@@ -342,7 +462,7 @@ canvas {
     }
 }
 
-
+/* ===== IMPRESSUM PAGE (lang="de") ===== */
 html[lang="de"] #impressum {
     position: relative;
     bottom: auto;
@@ -354,62 +474,75 @@ html[lang="de"] #impressum {
     box-shadow: none;
     border: 1px solid rgba(255, 255, 255, 0.15);
     background-color: rgba(0, 0, 0, 0.5);
+    display: block;
 }
 
 html[lang="de"] h1 {
     margin-top: 20px;
 }
 
+/* Consolidate impressum responsive rules - remove conflicts and overlaps */
 @media screen and (max-width: 900px) {
     #impressum:not([lang="de"]) {
         position: fixed;
-        z-index: 1251;
+        z-index: 900;
         background: transparent;
-        border: none;
-        box-shadow: none;
-
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
     }
 }
 
-@media screen and (min-width: 601px) and (max-width: 1024px) {
+/* Specific fix for very short viewports (e.g. landscape phones) */
+@media screen and (max-height: 450px) and (orientation: landscape) {
+    h1 {
+        display: none;
+    }
 
-    #touch-buttons {
-        display: flex;
-        position: absolute;
-        bottom: 90px;
-        left: 50%;
-        transform: translateX(-50%);
-        gap: 12px;
-        z-index: 1100;
+    #game-container {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    #impressum:not([lang="de"]) {
+        display: none;
     }
 
     #fullscreen-btn {
-        bottom: 0px;
+        bottom: 2px;
+        right: 4px;
+        font-size: 16px;
+        padding: 2px 6px;
+        z-index: 1110;
     }
 
     #mute-btn {
-        bottom: 00px;
+        bottom: 2px;
+        left: 4px;
+        font-size: 16px;
+        padding: 2px 6px;
+        z-index: 1110;
     }
 
-
-
-}
-
-@media screen and (max-width: 600px) {
-
-
-    #impressum:not([lang="de"]) {
-        position: fixed;
-        z-index: 1250;
-        background: transparent;
-        border: none;
-        box-shadow: none;
+    #info-btn {
+        top: 2px;
+        right: 4px;
+        font-size: 16px;
+        padding: 2px 6px;
     }
-}
 
-@media screen and (max-width: 420px) {
-    #impressum {
-        bottom: 10px;
-        width: min(92%, 700px);
+    #touch-buttons {
+        bottom: 32px;
+        z-index: 1090;
+    }
+
+    .canvas-btn {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+
+    #startButton,
+    #playAgainBtn {
+        font-size: 14px;
+        padding: 6px 12px;
     }
 }
