@@ -6,10 +6,10 @@
 class BottleStatusBar extends DrawableObject {
 
     /** @type {number} */
-    x = 220;
+    x = 20;
 
     /** @type {number} */
-    y = 40;
+    y = 100;
 
     /** @type {number} */
     width = 200;

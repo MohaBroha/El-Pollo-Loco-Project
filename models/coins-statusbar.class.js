@@ -8,7 +8,7 @@ class CoinStatusBar extends DrawableObject {
      * Position und Größe der Statusbar
      */
     x = 20;
-    y = 40;
+    y = 50;
     width = 200;
     height = 60;
 
