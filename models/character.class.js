@@ -20,6 +20,13 @@ class Character extends MovableObject {
      */
     width = 150;
 
+    offset = {
+    top: 30,
+    bottom: 30,
+    left: 40,
+    right: 50
+};
+
     /**
      * Laufgeschwindigkeit
      */
