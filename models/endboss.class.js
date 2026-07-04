@@ -142,7 +142,7 @@ class Endboss extends MovableObject {
      */
     animate() {
 
-        setInterval(() => {
+        setStoppableInterval(() => {
 
             if (this.animationLock) return;
             this.animationLock = true;
@@ -229,7 +229,7 @@ class Endboss extends MovableObject {
 
         }, 60);
 
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (!this.world || !this.world.character || this.dead) return;
 
             const character = this.world.character;

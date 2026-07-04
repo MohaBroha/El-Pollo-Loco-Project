@@ -49,7 +49,7 @@ class Coin extends MovableObject {
      * Animiert die Coin (Dreh-Effekt)
      */
     animate() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.currentFrame++;
             if (this.currentFrame >= this.images.length) this.currentFrame = 0;
             this.image.src = this.images[this.currentFrame];

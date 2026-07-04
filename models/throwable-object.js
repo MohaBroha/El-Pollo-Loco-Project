@@ -79,7 +79,7 @@ class ThrowableObject extends MovableObject {
         let currentFrame = 0;
         const frameCount = this.rotationImages.length;
 
-        this.rotationInterval = setInterval(() => {
+        this.rotationInterval = setStoppableInterval(() => {
             if (!this.hit) {
                 this.img = this.imageCache[this.rotationImages[currentFrame]];
                 currentFrame = (currentFrame + 1) % frameCount;
@@ -133,7 +133,7 @@ class ThrowableObject extends MovableObject {
         let currentFrame = 0;
         const frameCount = this.splashImages.length;
 
-        const animateSplash = setInterval(() => {
+        const animateSplash = setStoppableInterval(() => {
             if (currentFrame < frameCount) {
                 this.img = this.imageCache[this.splashImages[currentFrame]];
                 currentFrame++;

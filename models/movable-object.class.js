@@ -58,7 +58,7 @@ class MovableObject extends DrawableObject {
      * Aktiviert Gravitation und lässt das Objekt fallen.
      */
     applyGravity() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;

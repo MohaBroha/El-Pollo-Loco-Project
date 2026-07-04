@@ -20,6 +20,10 @@ class Character extends MovableObject {
      */
     width = 150;
 
+    /**
+     * Kollisions-Offset zur präziseren Hitbox.
+     * Verkleinert die Trefferfläche gegenüber der Grafik.
+    */    
     offset = {
     top: 30,
     bottom: 30,
@@ -186,7 +190,7 @@ class Character extends MovableObject {
     animate() {
 
         // 🎮 GAME LOGIC LOOP
-        setInterval(() => {
+        setStoppableInterval(() => {
 
             let moved = false;
 
@@ -234,7 +238,7 @@ class Character extends MovableObject {
             }
         }, 1000 / 60);
 
-        setInterval(() => {
+        setStoppableInterval(() => {
 
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);

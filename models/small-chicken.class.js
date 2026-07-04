@@ -52,13 +52,13 @@ class SmallChicken extends MovableObject {
      * Startet Bewegungs- und Animationsintervalle.
      */
     animate() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.isDead()) return;
             this.moveLeft();
             this.otherDirection = false;
         }, 1000 / 60);
 
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.isDead()) return;
             this.playAnimation(this.IMAGES_WALKING);
         }, 140);

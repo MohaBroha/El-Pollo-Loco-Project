@@ -54,13 +54,13 @@ class Chicken extends MovableObject {
      * Startet Bewegung und Animation des Huhns
      */
     animate() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.isDead()) return;
             this.moveLeft();
             this.otherDirection = false;
         }, 1000 / 60);
 
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.isDead()) return;
             this.playAnimation(this.IMAGES_WALKING);
         }, 160);

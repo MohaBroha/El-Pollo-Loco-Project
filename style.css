@@ -112,7 +112,7 @@ canvas {
     padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
     cursor: pointer;
     z-index: 20;
-    background-color: rgba(62, 136, 9, 0.8);
+    background-color: rgba(24, 3, 43, 0.795);    
     border: 2px solid #b2c509;
     border-radius: 10px;
     transition: background 0.2s ease, transform 0.2s ease;
@@ -190,6 +190,24 @@ canvas {
     pointer-events: auto;
 }
 
+.canvas-btn {
+    pointer-events: auto;
+    font-size: clamp(10px, 5vw, 15px);
+    padding: clamp(22px, 2vw, 2px) clamp(20px, 2vw, 32px);
+    margin: 0 6px;
+    border: none;   
+    border-radius: 10px;
+    background-color: rgba(24, 3, 43, 0.795);   
+    color: white;
+    cursor: pointer;
+    z-index: 1090;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+
 /* Remove old conflicting mobile rules that hide buttons */
 @media screen and (max-width: 600px) {
 
@@ -243,6 +261,8 @@ canvas {
     display: none;
 }
 
+
+
 /* Show touch buttons on mobile/tablet sizes */
 @media screen and (max-width: 1024px) {
     #touch-buttons {
@@ -254,7 +274,7 @@ canvas {
         width: 100%;
         justify-content: space-between;
         align-items: flex-end;
-        padding: 0 clamp(12px, 4vw, 24px);
+        padding: 4px;
         z-index: 1090;
         pointer-events: none;
         flex-wrap: nowrap;
@@ -302,6 +322,9 @@ canvas {
         z-index: 1110;
     }
 
+      
+
+
     #mute-btn {
         bottom: 2px;
         z-index: 1110;
@@ -314,35 +337,25 @@ canvas {
         padding: 0 8px;
     }
 
-    .canvas-btn {
-        gap: 4px;
-    }
+   
+    
 }
 
 /* Base button styling */
-.canvas-btn {
-    pointer-events: auto;
-    font-size: clamp(16px, 4vw, 24px);
-    padding: clamp(8px, 2vw, 15px) clamp(10px, 2.5vw, 20px);
-    margin: 0 2px;
-    border: none;
-    border-radius: 10px;
-    background-color: rgba(62, 136, 9, 0.8);
-    color: white;
-    cursor: pointer;
-    z-index: 1090;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
+
+#throwBtn img {
+    width: 20px;
+    height: 17px;
 }
 
 /* Smaller touch button text on very small screens */
 @media screen and (max-width: 400px) {
-    .canvas-btn {
-        font-size: 14px;
-        padding: 6px 8px;
+   
+ #touch-buttons {
+        display: flex;
     }
+
+ 
 }
 
 #game-container,
@@ -410,6 +423,10 @@ button:hover {
         display: flex;
     }
 
+     #touch-buttons {
+        display: flex;
+    }
+
     #game-container {
         display: none;
     }
@@ -445,6 +462,10 @@ button:hover {
         font-size: clamp(10px, 2vw, 14px);
         padding: 6px 10px;
         width: min(90%, 600px);
+    }
+    
+ #touch-buttons {
+        display: flex;
     }
 
     #game-container {
@@ -512,6 +533,9 @@ html[lang="de"] h1 {
         display: none;
     }
 
+    
+
+    
     #game-container {
         height: 100vh;
         height: 100dvh;
@@ -540,7 +564,7 @@ html[lang="de"] h1 {
     #info-btn {
         top: 2px;
         right: 4px;
-        font-size: 16px;
+        font-size: 20px;
         padding: 2px 6px;
     }
 
@@ -549,14 +573,11 @@ html[lang="de"] h1 {
         z-index: 1090;
     }
 
-    .canvas-btn {
-        font-size: 12px;
-        padding: 4px 6px;
-    }
+   
 
     #startButton,
     #playAgainBtn {
-        font-size: 14px;
+        font-size: 22px;
         padding: 6px 12px;
     }
 }
