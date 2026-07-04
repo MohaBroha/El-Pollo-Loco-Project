@@ -314,8 +314,8 @@ class Character extends MovableObject {
     throwBottle() {
         if (this.carryingBottles.length <= 0) return null;
 
-        const bottleX = this.otherDirection ? this.x - 50 : this.x + this.width;
-        const bottle = new ThrowableObject(bottleX, this.y + 50, this.otherDirection);
+        const bottleX = this.otherDirection ? this.x - 10 : this.x + this.width - 40;
+        const bottle = new ThrowableObject(bottleX, this.y + 135, this.otherDirection);
 
         this.carryingBottles.pop();
         return bottle;
