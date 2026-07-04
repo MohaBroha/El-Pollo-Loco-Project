@@ -5,7 +5,7 @@
  * und spielt entsprechende Animationen und Sounds ab.
  */
 class ThrowableObject extends MovableObject {
-    width = 60;
+    width = 80;
     height = 70;
     offset = { top: 10, bottom: 10, left: 10, right: 10 };
 

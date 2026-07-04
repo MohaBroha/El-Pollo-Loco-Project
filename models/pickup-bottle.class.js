@@ -23,8 +23,8 @@ class PickupBottle extends MovableObject {
         super().loadImage(PickupBottle.images[imageIndex]);
         this.x = x;
         this.y = y;
-        this.width = 40;
-        this.height = 60;
+        this.width = 80;
+        this.height = 70;
         this.offset = { top: 10, bottom: 10, left: 10, right: 10 };
         this.collected = false;
     }

@@ -23,7 +23,7 @@ class Character extends MovableObject {
     /**
      * Laufgeschwindigkeit
      */
-    speed = 10;
+    speed = 7;
 
     /**
      * Lebensenergie
@@ -73,6 +73,20 @@ class Character extends MovableObject {
     /**
      * Animationsbilder: Laufen
      */
+
+    IMAGES_IDLE = [
+    'img/img/2_character_pepe/1_idle/idle/I-1.png',
+    'img/img/2_character_pepe/1_idle/idle/I-2.png',
+    'img/img/2_character_pepe/1_idle/idle/I-3.png',
+    'img/img/2_character_pepe/1_idle/idle/I-4.png',
+    'img/img/2_character_pepe/1_idle/idle/I-5.png',
+    'img/img/2_character_pepe/1_idle/idle/I-6.png',
+    'img/img/2_character_pepe/1_idle/idle/I-7.png',
+    'img/img/2_character_pepe/1_idle/idle/I-8.png',
+    'img/img/2_character_pepe/1_idle/idle/I-9.png',
+    'img/img/2_character_pepe/1_idle/idle/I-10.png'
+];
+
     IMAGES_WALKING = [
         'img/img/2_character_pepe/2_walk/W-21.png',
         'img/img/2_character_pepe/2_walk/W-22.png',
@@ -149,6 +163,7 @@ class Character extends MovableObject {
         super().loadImage('img/img/2_character_pepe/2_walk/W-21.png');
 
         this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_IDLE_LONG);
         this.loadImages(this.IMAGES_DEAD);
@@ -250,17 +265,22 @@ class Character extends MovableObject {
                 return;
             }
 
+            if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+               if (!this.hasJustStopped) {
+               this.playAnimation(this.IMAGES_IDLE);
+               this.hasJustStopped = true;
+         }
+               return;
+     }  
+
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
                 this.hasJustStopped = false;
 
             } else {
-                if (!this.hasJustStopped) {
-                    this.img = this.imageCache[
-                        this.IMAGES_WALKING[this.IMAGES_WALKING.length - 1]
-                    ];
-
-                    this.hasJustStopped = true;
+               if (!this.hasJustStopped) {
+                   this.img = this.imageCache[this.IMAGES_IDLE_LONG[0]];
+                   this.hasJustStopped = true;
                 }
             }
 
