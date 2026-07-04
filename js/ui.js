@@ -25,8 +25,20 @@ let uiTimeout;
 /** @type {boolean} */
 let muted = false;
 
+const savedMute = localStorage.getItem("muted");
+
+if (savedMute !== null) {
+    muted = savedMute === "true";
+}
+
 /** @type {boolean} */
 let buttonActive = false;
+
+muteBtn.textContent = muted ? "🔇" : "🔈";
+
+if (audioManager) {
+    audioManager.toggleMute(muted);
+}
 
 /**
  * Entfernt den Fokus von einem Button-Element.
@@ -66,6 +78,7 @@ muteBtn.addEventListener('click', () => {
     buttonActive = true;
 
     muted = !muted;
+    localStorage.setItem("muted", muted);
 
     if (audioManager && typeof audioManager.toggleMute === 'function') {
         audioManager.toggleMute(muted);
