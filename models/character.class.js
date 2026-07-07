@@ -1,28 +1,28 @@
 /**
- * Hauptspieler-Charakter (Pepe)
- * Steuert Bewegung, Animationen, Zustände (Jump, Idle, Hurt, Dead) und Interaktionen im Spiel.
- * Er verarbeitet Keyboard-Input und synchronisiert die Kamera.
- */
+* Main player character (Pepe)
+* Controls movement, animations, states (Jump, Idle, Hurt, Dead), and in-game interactions.
+* It processes keyboard input and synchronizes the camera.
+*/
 class Character extends MovableObject {
 
     /**
-     * Start-Y-Position am Bodenlevel
-     */
+    * Start Y-position at ground level
+    */
     y = 80;
 
     /**
-     * Höhe der Spielfigur
-     */
+    * Height of the game character
+    */
     height = 280;
 
     /**
-     * Breite der Spielfigur
-     */
+    * Width of the game character
+    */
     width = 150;
 
     /**
-     * Kollisions-Offset zur präziseren Hitbox.
-     * Verkleinert die Trefferfläche gegenüber der Grafik.
+    * Collision offset for a more precise hitbox.
+    * Reduces the hit area compared to the graphic.
     */
     offset = {
         top: 30,
@@ -32,60 +32,59 @@ class Character extends MovableObject {
     };
 
     /**
-     * Laufgeschwindigkeit
-     */
+    * Running speed
+    */
     speed = 7;
 
     /**
-     * Lebensenergie
-     */
+    * Life energy
+    */
     energy = 100;
 
     /**
-     * Zeitpunkt des letzten Treffers (für Invincibility)
-     */
+    * Duration of invulnerability after a hit (ms)
+    */
     lastHitTime = 0;
 
     /**
-     * Dauer der Unverwundbarkeit nach Treffer (ms)
-     */
+    * Duration of invulnerability after a hit (ms)
+    */
     invincibleDuration = 1000;
 
     /**
-     * Zeit seit letzter Bewegung (Idle-Tracking)
-     */
+    * Time since last movement (idle tracking)
+    */
     idleTime = 0;
 
     /**
-     * Zeit bevor Idle-Animation startet (ms)
-     */
+    * Time before idle animation starts (ms)
+    */
     idleDelay = 3000;
 
     /**
-     * Bewegungsstatus
-     */
+    * Movement status
+    */
     isWalking = false;
 
     /**
-     * Flag: gerade gestoppt
-     */
+    * Flag: just stopped
+    */
     hasJustStopped = false;
 
     /**
-     * Flag: gerade gelandet
-     */
+    * Flag: just landed
+    */
     hasJustLanded = false;
     isJumpAnimationPlaying = false;
 
     /**
-     * Flag: Schnarchsound abgespielt
-     */
+    * Flag: Snoring sound played
+    */
     snorePlayed = false;
 
     /**
-     * Animationsbilder: Laufen
-     */
-
+    * Animated images: Idle
+    */
     IMAGES_IDLE = [
         'img/img/2_character_pepe/1_idle/idle/I-1.png',
         'img/img/2_character_pepe/1_idle/idle/I-2.png',
@@ -99,6 +98,9 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/1_idle/idle/I-10.png'
     ];
 
+    /**
+    * Animated images: Walking
+    */
     IMAGES_WALKING = [
         'img/img/2_character_pepe/2_walk/W-21.png',
         'img/img/2_character_pepe/2_walk/W-22.png',
@@ -109,8 +111,8 @@ class Character extends MovableObject {
     ];
 
     /**
-     * Animationsbilder: Springen
-     */
+    * Animated images: Jumping
+    */
     IMAGES_JUMPING = [
         'img/img/2_character_pepe/3_jump/J-31.png',
         'img/img/2_character_pepe/3_jump/J-32.png',
@@ -124,8 +126,8 @@ class Character extends MovableObject {
     ];
 
     /**
-     * Animationsbilder: Idle (lang)
-     */
+    * Animated images: Idle (long)
+    */
     IMAGES_IDLE_LONG = [
         'img/img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -140,8 +142,8 @@ class Character extends MovableObject {
     ];
 
     /**
-     * Animationsbilder: Tod
-     */
+    * Animated images: Death
+    */
     IMAGES_DEAD = [
         'img/img/2_character_pepe/5_dead/D-51.png',
         'img/img/2_character_pepe/5_dead/D-52.png',
@@ -153,8 +155,8 @@ class Character extends MovableObject {
     ];
 
     /**
-     * Animationsbilder: Hurt
-     */
+    * Animation frame: Hurt
+    */
     IMAGES_HURT = [
         'img/img/2_character_pepe/4_hurt/H-41.png',
         'img/img/2_character_pepe/4_hurt/H-42.png',
@@ -162,13 +164,13 @@ class Character extends MovableObject {
     ];
 
     /**
-     * Referenz zur Spielwelt
-     */
+    * Game World Reference
+    */
     world;
 
     /**
-     * Gesammelte/mitgeführte Flaschen
-     */
+    * Collected/carried bottles
+    */
     carryingBottles = [];
 
     constructor() {
@@ -186,131 +188,270 @@ class Character extends MovableObject {
     }
 
     /**
-     * Haupt-Animations- und Logikloop
-     */
+    * Main animation and logic loop
+    */
     animate() {
-
-        // 🎮 GAME LOGIC LOOP
         setStoppableInterval(() => {
-
-            let moved = false;
-
-            // RIGHT
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                moved = true;
-                this.handleWalkSound();
-            }
-
-            // LEFT
-            if (this.world.keyboard.LEFT && this.x > -2000) {
-                this.moveLeft();
-                moved = true;
-                this.handleWalkSound();
-            }
-
-            // JUMP
-            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
-                this.jump();
-                moved = true;
-                audioManager.playSound("jump");
-            }
-
-            if (this.wasAboveGround && !this.isAboveGround()) {
-                this.hasJustLanded = true;
-            }
-
-            this.wasAboveGround = this.isAboveGround();
-
-            this.world.camera_x = -this.x + 100;
-
-            // IDLE HANDLING
-            if (moved) {
-                this.idleTime = 0;
-                this.snorePlayed = false;
-                this.isWalking = true;
-                this.hasJustStopped = false;
-
-                audioManager.stopSound("snore");
-
-            } else {
-                this.idleTime += 5;
-                this.isWalking = false;
-            }
+            this.updateMovement();
         }, 1000 / 60);
 
         setStoppableInterval(() => {
-
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-                return;
-            }
-
-            if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-                return;
-            }
-
-            if (this.hasJustLanded) {
-                this.playAnimation([this.IMAGES_JUMPING[8]]);
-
-                setTimeout(() => {
-                    this.hasJustLanded = false;
-                }, 120);
-
-                return;
-            }
-
-            if (this.isAboveGround()) {
-                this.playJumpAnimation();
-                return;
-            }
-
-            if (this.idleTime > this.idleDelay) {
-                this.playAnimation(this.IMAGES_IDLE_LONG);
-
-                if (!this.snorePlayed) {
-                    audioManager.playSound("snore");
-                    this.snorePlayed = true;
-                }
-
-                return;
-            }
-
-            if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
-                {
-                    this.playAnimation(this.IMAGES_IDLE);
-                    this.hasJustStopped = true;
-                }
-                return;
-            }
-
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_WALKING);
-                this.hasJustStopped = false;
-
-            } else {
-                if (!this.hasJustStopped) {
-                    this.img = this.imageCache[this.IMAGES_IDLE_LONG[0]];
-                    this.hasJustStopped = true;
-                }
-            }
-
+            this.updateAnimation();
         }, 150);
     }
 
     /**
-     * Geh-Sound Steuerung
-     */
+    * Updates the player's movement.
+    */
+    updateMovement() {
+        let moved = false;
+
+        moved = this.handleRightMovement() || moved;
+        moved = this.handleLeftMovement() || moved;
+        moved = this.handleJump() || moved;
+
+        this.updateLandingState();
+        this.updateCamera();
+        this.updateIdleState(moved);
+    }
+
+    /**
+    * Updates the player's animation state.
+    */
+    updateAnimation() {
+        if (this.handleDeadAnimation()) {
+            return;
+        }
+
+        if (this.handleHurtAnimation()) {
+            return;
+        }
+
+        if (this.handleLandingAnimation()) {
+            return;
+        }
+
+        if (this.handleJumpAnimation()) {
+            return;
+        }
+
+        if (this.handleLongIdleAnimation()) {
+            return;
+        }
+
+        if (this.handleIdleAnimation()) {
+            return;
+        }
+
+        this.handleWalkingAnimation();
+    }
+
+    /**
+    * Updates the player's idle state.
+    *
+    * @param {boolean} moved - Whether the player moved this frame.
+    */
+    updateIdleState(moved) {
+        if (moved) {
+            this.idleTime = 0;
+            this.snorePlayed = false;
+            this.isWalking = true;
+            this.hasJustStopped = false;
+
+            audioManager.stopSound("snore");
+        } else {
+            this.idleTime += 5;
+            this.isWalking = false;
+        }
+    }
+
+    /**
+    * Updates the camera position.
+    */
+    updateCamera() {
+        this.world.camera_x = -this.x + 100;
+    }
+
+    /**
+    * Handles movement to the right.
+    *
+    * @returns {boolean} True if the player moved.
+    */
+    handleRightMovement() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            this.handleWalkSound();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles movement to the left.
+    *
+    * @returns {boolean} True if the player moved.
+    */
+    handleLeftMovement() {
+        if (this.world.keyboard.LEFT && this.x > -2000) {
+            this.moveLeft();
+            this.handleWalkSound();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles jumping.
+    *
+    * @returns {boolean} True if the player jumped.
+    */
+    handleJump() {
+        if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
+            this.jump();
+            audioManager.playSound("jump");
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Walking sound control
+    */
     handleWalkSound() {
         if (!this.isWalking) {
             this.isWalking = true;
             audioManager.playSound("walk");
         }
     }
+
     /**
- * Spielt die Sprunganimation genau einmal ab.
- */
+    * Updates the landing state.
+    */
+    updateLandingState() {
+        if (this.wasAboveGround && !this.isAboveGround()) {
+            this.hasJustLanded = true;
+        }
+
+        this.wasAboveGround = this.isAboveGround();
+    }
+
+    /**
+    * Handles the dead animation.
+    *
+    * @returns {boolean} True if the player is dead.
+    */
+    handleDeadAnimation() {
+        if (this.isDead()) {
+            this.playAnimation(this.IMAGES_DEAD);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles the hurt animation.
+    *
+    * @returns {boolean} True if the player is hurt.
+    */
+    handleHurtAnimation() {
+        if (this.isHurt()) {
+            this.playAnimation(this.IMAGES_HURT);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles the landing animation.
+    *
+    * @returns {boolean} True if the landing animation was played.
+    */
+    handleLandingAnimation() {
+        if (this.hasJustLanded) {
+            this.playAnimation([this.IMAGES_JUMPING[8]]);
+
+            setTimeout(() => {
+                this.hasJustLanded = false;
+            }, 120);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles the jump animation.
+    *
+    * @returns {boolean} True if the jump animation was played.
+    */
+    handleJumpAnimation() {
+        if (this.isAboveGround()) {
+            this.playJumpAnimation();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles the long idle animation.
+    *
+    * @returns {boolean} True if the long idle animation was played.
+    */
+    handleLongIdleAnimation() {
+        if (this.idleTime > this.idleDelay) {
+            this.playAnimation(this.IMAGES_IDLE_LONG);
+
+            if (!this.snorePlayed) {
+                audioManager.playSound("snore");
+                this.snorePlayed = true;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles the idle animation.
+    *
+    * @returns {boolean} True if the idle animation was played.
+    */
+    handleIdleAnimation() {
+        if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+            this.playAnimation(this.IMAGES_IDLE);
+            this.hasJustStopped = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Handles the walking animation.
+    */
+    handleWalkingAnimation() {
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            this.playAnimation(this.IMAGES_WALKING);
+            this.hasJustStopped = false;
+        } else {
+            if (!this.hasJustStopped) {
+                this.img = this.imageCache[this.IMAGES_IDLE_LONG[0]];
+                this.hasJustStopped = true;
+            }
+        }
+    }
+
+    /**
+    * Plays the jump animation exactly once.
+    */
     playJumpAnimation() {
         if (this.isJumpAnimationPlaying) return;
 
@@ -328,8 +469,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Wirft eine Flasche
-     */
+    * Throws a bottle
+    */
     throwBottle() {
         if (this.carryingBottles.length <= 0) return null;
 
@@ -341,8 +482,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Trefferlogik
-     */
+    * Hit logic
+    */
     hit() {
         const now = Date.now();
 
@@ -363,15 +504,15 @@ class Character extends MovableObject {
     }
 
     /**
-     * Prüft ob tot
-     */
+    * Checks if the player is dead
+    */
     isDead() {
         return this.energy <= 0;
     }
 
     /**
-     * Prüft ob verletzt
-     */
+    * Checks for injuries
+    */
     isHurt() {
         return Date.now() - this.lastHitTime < this.invincibleDuration;
     }
