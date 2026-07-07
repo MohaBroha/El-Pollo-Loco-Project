@@ -23,13 +23,13 @@ class Character extends MovableObject {
     /**
      * Kollisions-Offset zur präziseren Hitbox.
      * Verkleinert die Trefferfläche gegenüber der Grafik.
-    */    
+    */
     offset = {
-    top: 30,
-    bottom: 30,
-    left: 40,
-    right: 50
-};
+        top: 30,
+        bottom: 30,
+        left: 40,
+        right: 50
+    };
 
     /**
      * Laufgeschwindigkeit
@@ -75,7 +75,7 @@ class Character extends MovableObject {
      * Flag: gerade gelandet
      */
     hasJustLanded = false;
-isJumpAnimationPlaying = false;
+    isJumpAnimationPlaying = false;
 
     /**
      * Flag: Schnarchsound abgespielt
@@ -87,17 +87,17 @@ isJumpAnimationPlaying = false;
      */
 
     IMAGES_IDLE = [
-    'img/img/2_character_pepe/1_idle/idle/I-1.png',
-    'img/img/2_character_pepe/1_idle/idle/I-2.png',
-    'img/img/2_character_pepe/1_idle/idle/I-3.png',
-    'img/img/2_character_pepe/1_idle/idle/I-4.png',
-    'img/img/2_character_pepe/1_idle/idle/I-5.png',
-    'img/img/2_character_pepe/1_idle/idle/I-6.png',
-    'img/img/2_character_pepe/1_idle/idle/I-7.png',
-    'img/img/2_character_pepe/1_idle/idle/I-8.png',
-    'img/img/2_character_pepe/1_idle/idle/I-9.png',
-    'img/img/2_character_pepe/1_idle/idle/I-10.png'
-];
+        'img/img/2_character_pepe/1_idle/idle/I-1.png',
+        'img/img/2_character_pepe/1_idle/idle/I-2.png',
+        'img/img/2_character_pepe/1_idle/idle/I-3.png',
+        'img/img/2_character_pepe/1_idle/idle/I-4.png',
+        'img/img/2_character_pepe/1_idle/idle/I-5.png',
+        'img/img/2_character_pepe/1_idle/idle/I-6.png',
+        'img/img/2_character_pepe/1_idle/idle/I-7.png',
+        'img/img/2_character_pepe/1_idle/idle/I-8.png',
+        'img/img/2_character_pepe/1_idle/idle/I-9.png',
+        'img/img/2_character_pepe/1_idle/idle/I-10.png'
+    ];
 
     IMAGES_WALKING = [
         'img/img/2_character_pepe/2_walk/W-21.png',
@@ -262,9 +262,9 @@ isJumpAnimationPlaying = false;
             }
 
             if (this.isAboveGround()) {
-    this.playJumpAnimation();
-    return;
-}
+                this.playJumpAnimation();
+                return;
+            }
 
             if (this.idleTime > this.idleDelay) {
                 this.playAnimation(this.IMAGES_IDLE_LONG);
@@ -279,20 +279,20 @@ isJumpAnimationPlaying = false;
 
             if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
                 {
-               this.playAnimation(this.IMAGES_IDLE);
-               this.hasJustStopped = true;
-         }
-               return;
-     }  
+                    this.playAnimation(this.IMAGES_IDLE);
+                    this.hasJustStopped = true;
+                }
+                return;
+            }
 
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
                 this.hasJustStopped = false;
 
             } else {
-               if (!this.hasJustStopped) {
-                   this.img = this.imageCache[this.IMAGES_IDLE_LONG[0]];
-                   this.hasJustStopped = true;
+                if (!this.hasJustStopped) {
+                    this.img = this.imageCache[this.IMAGES_IDLE_LONG[0]];
+                    this.hasJustStopped = true;
                 }
             }
 
@@ -311,21 +311,21 @@ isJumpAnimationPlaying = false;
     /**
  * Spielt die Sprunganimation genau einmal ab.
  */
-playJumpAnimation() {
-    if (this.isJumpAnimationPlaying) return;
+    playJumpAnimation() {
+        if (this.isJumpAnimationPlaying) return;
 
-    this.isJumpAnimationPlaying = true;
-    this.currentImage = 0;
+        this.isJumpAnimationPlaying = true;
+        this.currentImage = 0;
 
-    const jumpInterval = setInterval(() => {
-        this.playAnimation(this.IMAGES_JUMPING);
+        const jumpInterval = setInterval(() => {
+            this.playAnimation(this.IMAGES_JUMPING);
 
-        if (this.currentImage >= this.IMAGES_JUMPING.length) {
-            clearInterval(jumpInterval);
-            this.isJumpAnimationPlaying = false;
-        }
-    }, 100);
-}
+            if (this.currentImage >= this.IMAGES_JUMPING.length) {
+                clearInterval(jumpInterval);
+                this.isJumpAnimationPlaying = false;
+            }
+        }, 100);
+    }
 
     /**
      * Wirft eine Flasche

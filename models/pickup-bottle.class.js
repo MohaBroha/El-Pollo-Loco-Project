@@ -26,11 +26,11 @@ class PickupBottle extends MovableObject {
         this.width = 80;
         this.height = 70;
         this.offset = {
-                        top: 30,
-                        bottom: 30,
-                        left: 30,
-                        right: 30
-                    };        
+            top: 30,
+            bottom: 30,
+            left: 30,
+            right: 30
+        };
         this.collected = false;
     }
 

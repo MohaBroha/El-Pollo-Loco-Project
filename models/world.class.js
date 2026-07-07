@@ -283,12 +283,12 @@ class World {
 
         this.addtoMap(this.statusBar);
         this.addtoMap(this.coinStatusBar);
-        
+
         const endboss = this.level.enemies.find(e => e instanceof Endboss);
 
         this.bottleStatusBar.x = 20;
-this.bottleStatusBar.y = 100;
-this.addtoMap(this.bottleStatusBar);
+        this.bottleStatusBar.y = 100;
+        this.addtoMap(this.bottleStatusBar);
 
 
 

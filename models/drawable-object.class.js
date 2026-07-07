@@ -54,7 +54,7 @@ class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-   
+
 
     /**
      * Lädt mehrere Bilder in den Cache

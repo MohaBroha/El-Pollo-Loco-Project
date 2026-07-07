@@ -35,11 +35,11 @@ class Coin extends MovableObject {
         this.x = x;
         this.y = y;
         this.offset = {
-                top: 35,
-                bottom: 35,
-                left: 35,
-                right: 35
-                };
+            top: 35,
+            bottom: 35,
+            left: 35,
+            right: 35
+        };
         this.image.src = this.images[this.currentFrame];
 
         this.animate();
