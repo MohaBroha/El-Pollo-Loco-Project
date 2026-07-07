@@ -1,6 +1,5 @@
 /**
- * Cloud ist ein dekoratives Hintergrund-Objekt.
- * Sie bewegt sich kontinuierlich nach links und erzeugt Tiefenwirkung.
+ * Decorative cloud used in the background to add parallax/depth.
  */
 class Cloud extends MovableObject {
 
@@ -27,7 +26,7 @@ class Cloud extends MovableObject {
     }
 
     /**
-     * Startet die Bewegung der Cloud
+     * Start moving the cloud (simple left movement for parallax).
      */
     animate() {
         this.moveLeft();

@@ -41,8 +41,9 @@ if (audioManager) {
 }
 
 /**
- * Entfernt den Fokus von einem Button-Element.
- * @param {HTMLButtonElement} btn - Der Button, der den Fokus verlieren soll.
+ * Remove keyboard focus from a button element.
+ *
+ * @param {HTMLButtonElement} btn - Button element to blur.
  */
 function removeFocus(btn) {
     btn.blur();
@@ -132,7 +133,7 @@ document.addEventListener('mousemove', () => {
 });
 
 /**
- * Zeigt UI-Buttons im Vollbildmodus an.
+ * Show UI buttons when in fullscreen mode. Hides them again after a timeout.
  */
 function showUI() {
     uiButtons.forEach(btn => btn.classList.add('show-ui'));
@@ -142,7 +143,7 @@ function showUI() {
 }
 
 /**
- * Versteckt UI-Buttons im Vollbildmodus.
+ * Hide UI buttons when in fullscreen mode.
  */
 function hideUI() {
     if (!document.fullscreenElement) return;

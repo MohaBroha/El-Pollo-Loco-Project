@@ -1,6 +1,6 @@
 /**
- * DrawableObject ist die Basis-Klasse für alle sichtbaren Objekte im Spiel.
- * Sie stellt Grundfunktionen für Laden und Zeichnen von Bildern bereit.
+ * Base class for all visible objects in the game.
+ * Provides basic image loading, caching and drawing functionality.
  */
 class DrawableObject {
 
@@ -40,7 +40,9 @@ class DrawableObject {
     currentImage = 0;
 
     /**
-     * Lädt ein einzelnes Bild
+     * Load an image from the given path and assign it to `this.img`.
+     *
+     * @param {string} path - Relative path to the image file.
      */
     loadImage(path) {
         this.img = new Image();
@@ -48,7 +50,9 @@ class DrawableObject {
     }
 
     /**
-     * Zeichnet das Objekt auf den Canvas
+     * Draw the object's current image on the provided canvas context.
+     *
+     * @param {CanvasRenderingContext2D} ctx - Canvas rendering context.
      */
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
@@ -57,7 +61,9 @@ class DrawableObject {
 
 
     /**
-     * Lädt mehrere Bilder in den Cache
+     * Preload multiple images into the internal image cache.
+     *
+     * @param {string[]} arr - Array of image paths to preload.
      */
     loadImages(arr) {
         arr.forEach((path) => {

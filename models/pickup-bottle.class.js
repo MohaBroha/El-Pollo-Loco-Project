@@ -1,6 +1,5 @@
 /**
- * PickupBottle ist ein einsammelbares Objekt im Spiel.
- * Sie kann vom Spieler aufgenommen und später geworfen werden.
+ * Pickup bottle that can be collected by the player and later thrown.
  */
 class PickupBottle extends MovableObject {
 
@@ -13,11 +12,11 @@ class PickupBottle extends MovableObject {
     ];
 
     /**
-     * Erstellt eine neue einsammelbare Flasche.
+     * Create a pickup bottle at the specified coordinates.
      *
-     * @param {number} x X-Position
-     * @param {number} y Y-Position
-     * @param {number} imageIndex Auswahl des Bildes
+     * @param {number} x - X position.
+     * @param {number} y - Y position.
+     * @param {number} [imageIndex=0] - Index selecting the bottle image.
      */
     constructor(x, y, imageIndex = 0) {
         super().loadImage(PickupBottle.images[imageIndex]);
@@ -35,9 +34,9 @@ class PickupBottle extends MovableObject {
     }
 
     /**
-     * Zeichnet die Flasche nur wenn sie noch nicht eingesammelt wurde.
+     * Draw the bottle only if it has not been collected.
      *
-     * @param {CanvasRenderingContext2D} ctx Canvas Context
+     * @param {CanvasRenderingContext2D} ctx - Canvas context.
      */
     draw(ctx) {
         if (!this.collected) {
@@ -46,12 +45,12 @@ class PickupBottle extends MovableObject {
     }
 
     /**
-     * Generiert automatisch Flaschen über die komplette Levelstrecke.
+     * Generate bottles across the level range at varying intervals.
      *
-     * @param {number} startX Startposition
-     * @param {number} endX Endposition
-     * @param {number} groundY Höhe am Boden
-     * @returns {PickupBottle[]} Array von Flaschen
+     * @param {number} [startX=200] - Start X coordinate.
+     * @param {number} [endX=5040] - End X coordinate.
+     * @param {number} [groundY=400] - Ground Y coordinate to place bottles.
+     * @returns {PickupBottle[]} Array of generated bottles.
      */
     static generateBottles(startX = 200, endX = 720 * 7, groundY = 400) {
         const bottles = [];

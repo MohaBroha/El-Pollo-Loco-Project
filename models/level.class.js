@@ -1,6 +1,5 @@
 /**
- * Level definiert eine komplette Spielwelt-Konfiguration.
- * Enthält Gegner, Hintergrundelemente, Clouds und Coins.
+ * Level configuration container that holds enemies, backgrounds, clouds and coins.
  */
 class Level {
 
@@ -30,12 +29,12 @@ class Level {
     level_end_x = 3650;
 
     /**
-     * Erstellt ein neues Level mit allen Komponenten.
+     * Create a new Level instance.
      *
-     * @param {Array} enemies Gegnerliste
-     * @param {Array} clouds Wolkenliste
-     * @param {Array} backgroundObjects Hintergrundobjekte
-     * @param {Array} coins Coins im Level
+     * @param {Array} enemies - Array of enemy objects.
+     * @param {Array} clouds - Array of cloud objects.
+     * @param {Array} backgroundObjects - Array of background objects.
+     * @param {Array} coins - Array of coin objects.
      */
     constructor(enemies, clouds, backgroundObjects, coins) {
         this.enemies = enemies;

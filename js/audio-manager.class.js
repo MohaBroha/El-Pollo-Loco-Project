@@ -1,7 +1,6 @@
 /**
- * AudioManager (Singleton)
- * Verwaltet alle Spiel-Sounds und Hintergrundmusik.
- * Kontrolliert Mute, Lautstärke, Sound-Locks und Verhalten bei Spielende.
+ * AudioManager (singleton).
+ * Manages sound effects and background music, volume, mute state and sound locks.
  */
 class AudioManager {
     constructor() {
@@ -31,9 +30,11 @@ class AudioManager {
     }
 
     /**
-     * Spielt einen Soundeffekt ab.
-     * @param {string} name - Sound-Schlüssel aus AUDIO_LIBRARY
-     * @param {boolean} [force=false] - Ignoriert Locks und Spielstatus, falls true
+     * Play a short sound effect identified by name from `AUDIO_LIBRARY`.
+     * Sound playback respects the global mute and `gameEnded` state unless `force` is true.
+     *
+     * @param {string} name - Key in `AUDIO_LIBRARY` identifying the sound.
+     * @param {boolean} [force=false] - If true, ignore locks and game-ended checks.
      */
     playSound(name, force = false) {
         if (this.muted) return;
@@ -76,17 +77,21 @@ class AudioManager {
     }
 
     /**
-     * Entfernt einen beendeten Sound aus der aktiven Liste.
+     * Remove a finished audio element from the active sounds list.
+     *
      * @private
+     * @param {HTMLAudioElement} audio - Audio element that finished playback.
      */
     _removeActiveSound(audio) {
         this.activeSounds = this.activeSounds.filter(item => item.audio !== audio);
     }
 
     /**
-     * Spielt Hintergrundmusik ab.
-     * @param {string} name - Musik-Schlüssel aus AUDIO_LIBRARY
-     * @param {boolean} [loop=true]
+     * Play background music identified by `name` from `AUDIO_LIBRARY`.
+     * Replaces any currently playing music.
+     *
+     * @param {string} name - Key in `AUDIO_LIBRARY` for the music track.
+     * @param {boolean} [loop=true] - Whether the music should loop.
      */
     playMusic(name, loop = true) {
         if (this.gameEnded) return;
@@ -115,7 +120,7 @@ class AudioManager {
     }
 
     /**
-     * Stoppt alle Audio-Ausgaben (Musik + Sounds).
+     * Stop all audio playback including music and active sound effects.
      */
     stopAll() {
         this.stopMusic();
@@ -129,7 +134,7 @@ class AudioManager {
     }
 
     /**
-     * Stoppt die Hintergrundmusik.
+     * Stop background music playback and reset the track to start.
      */
     stopMusic() {
         if (!this.music) return;
@@ -139,8 +144,9 @@ class AudioManager {
     }
 
     /**
-     * Setzt den Spiel-Ende-Zustand.
-     * @param {boolean} state
+     * Set the game-ended state which affects whether some sounds are allowed to play.
+     *
+     * @param {boolean} state - True if the game has ended.
      */
     setGameEnded(state) {
         this.gameEnded = state;
@@ -150,8 +156,9 @@ class AudioManager {
     }
 
     /**
-     * Stoppt einen bestimmten Sound anhand seines Namens.
-     * @param {string} name
+     * Stop all currently playing sounds that match the given name.
+     *
+     * @param {string} name - Name/key of the sound to stop.
      */
     stopSound(name) {
         const soundsToStop = this.activeSounds.filter(item => item.name === name);
@@ -166,8 +173,9 @@ class AudioManager {
     }
 
     /**
-     * Aktiviert oder deaktiviert Mute.
-     * @param {boolean} state
+     * Toggle global mute state.
+     *
+     * @param {boolean} state - True to mute, false to unmute.
      */
     toggleMute(state) {
         this.muted = state;
@@ -177,7 +185,7 @@ class AudioManager {
     }
 
     /**
-     * Stummschalten aller Sounds.
+     * Mute all audio and pause currently playing tracks.
      */
     muteAll() {
         this.muted = true;
@@ -192,7 +200,7 @@ class AudioManager {
     }
 
     /**
-     * Hebt Stummschaltung auf und setzt Audio fort.
+     * Unmute audio and resume paused tracks where possible.
      */
     unmuteAll() {
         this.muted = false;
@@ -207,8 +215,9 @@ class AudioManager {
     }
 
     /**
-     * Setzt die globale Lautstärke für alle Audioquellen.
-     * @param {number} value
+     * Set the global volume for music and active sounds.
+     *
+     * @param {number} value - Volume value between 0.0 and 1.0.
      */
     setVolume(value) {
         this.volume = value;

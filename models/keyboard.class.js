@@ -1,36 +1,23 @@
 /**
- * Keyboard repräsentiert den aktuellen Tastenzustand.
- * Wird vom Input-System genutzt, um Spielerbewegungen zu steuern.
+ * Simple keyboard state holder used by the input system to control player movement.
  */
 class Keyboard {
 
-    /**
-     * Bewegung nach links aktiv
-     */
+    /** Movement left pressed */
     LEFT = false;
 
-    /**
-     * Bewegung nach rechts aktiv
-     */
+    /** Movement right pressed */
     RIGHT = false;
 
-    /**
-     * Springen / nach oben
-     */
+    /** Jump / up pressed */
     UP = false;
 
-    /**
-     * nach unten / crouch (falls genutzt)
-     */
+    /** Down / crouch pressed (if used) */
     DOWN = false;
 
-    /**
-     * Sprungtaste (z. B. SPACE)
-     */
+    /** Jump key (e.g. SPACE) */
     SPACE = false;
 
-    /**
-     * Wurf- / Actiontaste (z. B. D für Bottle throw)
-     */
+    /** Throw/action key (e.g. D for bottle throw) */
     D = false;
 }

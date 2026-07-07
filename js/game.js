@@ -37,10 +37,11 @@ let startScreenAnimationId;
 
 
 /**
- * Erstellt ein stoppbares Intervall und speichert dessen ID.
- * @param {Function} fn
- * @param {number} time
- * @returns {number}
+ * Create a stoppable interval and record its id for later clearing.
+ *
+ * @param {Function} fn - Function to execute on each tick.
+ * @param {number} time - Interval time in milliseconds.
+ * @returns {number} Interval id returned by `setInterval`.
  */
 function setStoppableInterval(fn, time) {
     let id = setInterval(fn, time);
@@ -49,7 +50,7 @@ function setStoppableInterval(fn, time) {
 }
 
 /**
- * Zeichnet den animierten Startbildschirm.
+ * Draw the animated start screen and schedule the next frame.
  */
 function drawStartScreen() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -59,7 +60,7 @@ function drawStartScreen() {
 }
 
 /**
- * Initialisiert die Spielwelt und das Canvas.
+ * Initialize the game canvas, level and world instance.
  */
 function init() {
     canvas = document.getElementById('canvas');
@@ -75,7 +76,7 @@ function init() {
 }
 
 /**
- * Startet das Spiel neu und setzt alle Zustände zurück.
+ * Restart the game by resetting state, stopping sounds and reinitializing the world.
  */
 function restartGame() {
     gameEnded = false;
@@ -102,8 +103,9 @@ function restartGame() {
 }
 
 /**
- * Zeigt den Endscreen (Gewonnen oder Verloren).
- * @param {boolean} [won=false]
+ * Show the end screen (victory or game over) and play the appropriate sound.
+ *
+ * @param {boolean} [won=false] - True for victory screen, false for game over.
  */
 function showEndScreen(won = false) {
     if (endScreenShown) return;
@@ -132,7 +134,7 @@ function showEndScreen(won = false) {
 }
 
 /**
- * Einstiegspunkt nach dem Laden der Seite.
+ * Entry point after the page has loaded: start the start-screen animation.
  */
 window.onload = () => {
     canvas = document.getElementById('canvas');
@@ -141,9 +143,10 @@ window.onload = () => {
 };
 
 /**
- * Bindet Touch- und Maussteuerung an den Keyboard-Status.
- * @param {string} buttonId
- * @param {string} keyName
+ * Bind touch and mouse events of an on-screen button to a keyboard state key.
+ *
+ * @param {string} buttonId - DOM id of the touch button element.
+ * @param {string} keyName - Name of the Keyboard property to toggle (e.g. 'LEFT').
  */
 function bindTouchButton(buttonId, keyName) {
     const button = document.getElementById(buttonId);

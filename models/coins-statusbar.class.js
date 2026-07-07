@@ -1,6 +1,5 @@
 /**
- * CoinStatusBar zeigt die eingesammelten Münzen als visuelle Anzeige.
- * Die Anzeige verändert sich abhängig von der Anzahl gesammelter Coins.
+ * UI element that shows the number of collected coins as a visual status bar.
  */
 class CoinStatusBar extends DrawableObject {
 
@@ -34,6 +33,9 @@ class CoinStatusBar extends DrawableObject {
         'img/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
     ];
 
+    /**
+     * Initialize the coin status bar and preload images.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES);
@@ -41,7 +43,9 @@ class CoinStatusBar extends DrawableObject {
     }
 
     /**
-     * Setzt die aktuelle Coin-Anzahl und aktualisiert das Bild
+     * Set current collected coins and update the displayed image.
+     *
+     * @param {number} coinsCollected - Number of coins collected.
      */
     setCoins(coinsCollected) {
         this.coinsCollected = coinsCollected;
@@ -51,7 +55,9 @@ class CoinStatusBar extends DrawableObject {
     }
 
     /**
-     * Berechnet den passenden Index für die Statusanzeige
+     * Resolve the appropriate image index based on the number of collected coins.
+     *
+     * @returns {number} Index in the `IMAGES` array.
      */
     resolveImageIndex() {
         if (this.coinsCollected <= 0) return 0;

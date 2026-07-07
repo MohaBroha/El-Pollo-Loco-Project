@@ -1,7 +1,6 @@
 /**
- * Repräsentiert ein statisches Hintergrundobjekt in der Spielwelt.
- * Wird für Parallax-Ebenen wie Boden, Berge usw. verwendet.
- * Erbt von MovableObject für ein einheitliches Rendering-System.
+ * Represents a static background object used for parallax layers (ground, mountains, etc.).
+ * Inherits from MovableObject to integrate with the rendering system.
  */
 class BackgroundObjects extends MovableObject {
 
@@ -12,10 +11,10 @@ class BackgroundObjects extends MovableObject {
     height = 480;
 
     /**
-     * Erstellt ein Hintergrundobjekt an einer bestimmten Position.
+     * Create a background object at the specified X position.
      *
-     * @param {string} ImagePath - Pfad zur Bilddatei.
-     * @param {number} x - Horizontale Position in der Spielwelt.
+     * @param {string} ImagePath - Path to the image file.
+     * @param {number} x - Horizontal position in the world.
      */
     constructor(ImagePath, x) {
         super().loadImage(ImagePath);

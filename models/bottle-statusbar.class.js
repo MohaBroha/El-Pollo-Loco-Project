@@ -34,7 +34,7 @@ class BottleStatusBar extends DrawableObject {
     ];
 
     /**
-     * Erstellt die Flaschen-Statusleiste und lädt alle UI-Bilder.
+     * Initialize the bottle status bar and preload UI images.
      */
     constructor() {
         super();
@@ -45,9 +45,9 @@ class BottleStatusBar extends DrawableObject {
     }
 
     /**
-     * Aktualisiert die Anzahl der gesammelten Flaschen
-     * und setzt das passende UI-Bild.
-     * @param {number} bottlesCollected
+     * Update the number of collected bottles and set the appropriate UI image.
+     *
+     * @param {number} bottlesCollected - Number of bottles collected by the player.
      */
     setBottles(bottlesCollected) {
         this.bottlesCollected = bottlesCollected;
@@ -57,9 +57,9 @@ class BottleStatusBar extends DrawableObject {
     }
 
     /**
-     * Berechnet den passenden Statusleisten-Index
-     * basierend auf der Anzahl gesammelter Flaschen.
-     * @returns {number}
+     * Resolve the image index for the status bar based on collected bottles.
+     *
+     * @returns {number} Index in the `IMAGES` array.
      */
     resolveImageIndex() {
         let percentage = (this.bottlesCollected / this.maxBottles) * 100;

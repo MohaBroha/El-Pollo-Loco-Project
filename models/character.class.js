@@ -1,8 +1,7 @@
 /**
-* Main player character (Pepe)
-* Controls movement, animations, states (Jump, Idle, Hurt, Dead), and in-game interactions.
-* It processes keyboard input and synchronizes the camera.
-*/
+ * Main player character (Pepe).
+ * Handles movement, animations, input processing and interactions with the world.
+ */
 class Character extends MovableObject {
 
     /**
@@ -173,6 +172,9 @@ class Character extends MovableObject {
     */
     carryingBottles = [];
 
+    /**
+     * Create the player character, preload animations and start gravity/animation loops.
+     */
     constructor() {
         super().loadImage('img/img/2_character_pepe/2_walk/W-21.png');
 
@@ -188,8 +190,8 @@ class Character extends MovableObject {
     }
 
     /**
-    * Main animation and logic loop
-    */
+     * Start the character's internal animation and movement update loops.
+     */
     animate() {
         setStoppableInterval(() => {
             this.updateMovement();
@@ -201,8 +203,8 @@ class Character extends MovableObject {
     }
 
     /**
-    * Updates the player's movement.
-    */
+     * Update movement by handling input actions and camera/idle state.
+     */
     updateMovement() {
         let moved = false;
 
@@ -216,8 +218,8 @@ class Character extends MovableObject {
     }
 
     /**
-    * Updates the player's animation state.
-    */
+     * Update the animation state based on character status (dead, hurt, jump, idle, walking).
+     */
     updateAnimation() {
         if (this.handleDeadAnimation()) {
             return;
@@ -247,10 +249,10 @@ class Character extends MovableObject {
     }
 
     /**
-    * Updates the player's idle state.
-    *
-    * @param {boolean} moved - Whether the player moved this frame.
-    */
+     * Update idle-related timers and sound based on whether the player moved.
+     *
+     * @param {boolean} moved - Whether the player moved this frame.
+     */
     updateIdleState(moved) {
         if (moved) {
             this.idleTime = 0;
@@ -266,17 +268,17 @@ class Character extends MovableObject {
     }
 
     /**
-    * Updates the camera position.
-    */
+     * Update camera horizontal offset to follow the player.
+     */
     updateCamera() {
         this.world.camera_x = -this.x + 100;
     }
 
     /**
-    * Handles movement to the right.
-    *
-    * @returns {boolean} True if the player moved.
-    */
+     * Handle right movement input and apply movement and sounds.
+     *
+     * @returns {boolean} True if movement occurred.
+     */
     handleRightMovement() {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
             this.moveRight();
@@ -288,10 +290,10 @@ class Character extends MovableObject {
     }
 
     /**
-    * Handles movement to the left.
-    *
-    * @returns {boolean} True if the player moved.
-    */
+     * Handle left movement input and apply movement and sounds.
+     *
+     * @returns {boolean} True if movement occurred.
+     */
     handleLeftMovement() {
         if (this.world.keyboard.LEFT && this.x > -2000) {
             this.moveLeft();
@@ -303,10 +305,10 @@ class Character extends MovableObject {
     }
 
     /**
-    * Handles jumping.
-    *
-    * @returns {boolean} True if the player jumped.
-    */
+     * Handle jump input and trigger jump sound.
+     *
+     * @returns {boolean} True if jump was initiated.
+     */
     handleJump() {
         if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
             this.jump();
@@ -318,8 +320,8 @@ class Character extends MovableObject {
     }
 
     /**
-    * Walking sound control
-    */
+     * Play walking sound when starting to walk.
+     */
     handleWalkSound() {
         if (!this.isWalking) {
             this.isWalking = true;
@@ -328,8 +330,8 @@ class Character extends MovableObject {
     }
 
     /**
-    * Updates the landing state.
-    */
+     * Update flags related to landing detection (used to play landing animation).
+     */
     updateLandingState() {
         if (this.wasAboveGround && !this.isAboveGround()) {
             this.hasJustLanded = true;
@@ -339,10 +341,10 @@ class Character extends MovableObject {
     }
 
     /**
-    * Handles the dead animation.
-    *
-    * @returns {boolean} True if the player is dead.
-    */
+     * Play death animation if character is dead.
+     *
+     * @returns {boolean} True when the death animation was applied.
+     */
     handleDeadAnimation() {
         if (this.isDead()) {
             this.playAnimation(this.IMAGES_DEAD);
@@ -353,10 +355,10 @@ class Character extends MovableObject {
     }
 
     /**
-    * Handles the hurt animation.
-    *
-    * @returns {boolean} True if the player is hurt.
-    */
+     * Play hurt animation if the character is in hurt state.
+     *
+     * @returns {boolean} True when hurt animation was applied.
+     */
     handleHurtAnimation() {
         if (this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
@@ -367,10 +369,10 @@ class Character extends MovableObject {
     }
 
     /**
-    * Handles the landing animation.
-    *
-    * @returns {boolean} True if the landing animation was played.
-    */
+     * Play a short landing animation when the character just landed.
+     *
+     * @returns {boolean} True when landing animation was applied.
+     */
     handleLandingAnimation() {
         if (this.hasJustLanded) {
             this.playAnimation([this.IMAGES_JUMPING[8]]);
@@ -386,10 +388,10 @@ class Character extends MovableObject {
     }
 
     /**
-    * Handles the jump animation.
-    *
-    * @returns {boolean} True if the jump animation was played.
-    */
+     * Play jump animation while the character is above ground.
+     *
+     * @returns {boolean} True when jump animation was applied.
+     */
     handleJumpAnimation() {
         if (this.isAboveGround()) {
             this.playJumpAnimation();

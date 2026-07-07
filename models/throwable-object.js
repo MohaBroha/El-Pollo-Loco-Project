@@ -1,8 +1,7 @@
 /**
- * Repräsentiert eine werfbare Salsa-Flasche.
- * Die Flasche rotiert während des Flugs,
- * kann auf dem Boden oder an Gegnern zerschellen
- * und spielt entsprechende Animationen und Sounds ab.
+ * Represents a throwable salsa bottle.
+ * The bottle rotates while flying, can break on the ground or on enemies,
+ * and plays splash animations and sounds.
  */
 class ThrowableObject extends MovableObject {
     width = 80;
@@ -37,11 +36,11 @@ class ThrowableObject extends MovableObject {
     toRemove = false;
 
     /**
-     * Erstellt ein neues Wurfobjekt.
+     * Create a throwable bottle and initialize flight parameters and images.
      *
-     * @param {number} x X-Position der Flasche.
-     * @param {number} y Y-Position der Flasche.
-     * @param {boolean} [otherDirection=false] Gibt an, ob die Flasche nach links geworfen wird.
+     * @param {number} x - Initial X position of the bottle.
+     * @param {number} y - Initial Y position of the bottle.
+     * @param {boolean} [otherDirection=false] - True if thrown to the left.
      */
     constructor(x, y, otherDirection = false) {
         super();
@@ -59,8 +58,7 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Aktualisiert die Flugbewegung der Flasche.
-     * Berechnet Flugbahn und Position während des Wurfs.
+     * Update the bottle's position during flight; apply gravity and horizontal speed.
      */
     update() {
         if (this.toRemove) return;
@@ -73,7 +71,7 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Startet die Rotationsanimation der Flasche während des Flugs.
+     * Animate bottle rotation by cycling through rotation images until the bottle hits.
      */
     animateRotation() {
         let currentFrame = 0;
@@ -90,8 +88,7 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Wird aufgerufen, wenn die Flasche einen Gegner trifft.
-     * Stoppt die Rotation, spielt Sound und Splash-Animation.
+     * Handle logic for hitting an enemy: stop rotation, play sound and splash animation.
      */
     hitEnemy() {
         if (this.hit) return;
@@ -107,8 +104,7 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Wird aufgerufen, wenn die Flasche den Boden berührt.
-     * Stoppt die Rotation, spielt Sound und Splash-Animation.
+     * Handle logic for hitting the ground: stop rotation, play sound and splash animation.
      */
     hitGround() {
         if (this.hit) return;
@@ -124,10 +120,9 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Spielt die Splash-Animation der zerbrechenden Flasche ab.
+     * Play the splash animation sequence and call the provided callback when finished.
      *
-     * @param {Function} doneCallback Callback-Funktion,
-     * die nach Abschluss der Animation ausgeführt wird.
+     * @param {Function} doneCallback - Called after the splash animation completes.
      */
     playSplashAnimation(doneCallback) {
         let currentFrame = 0;

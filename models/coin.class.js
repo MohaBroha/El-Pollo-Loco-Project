@@ -1,6 +1,5 @@
 /**
- * Coin ist ein einsammelbares Objekt im Spiel.
- * Sie animiert sich selbst und kann vom Spieler eingesammelt werden.
+ * Collectible coin object. Animates itself and can be collected by the player.
  */
 class Coin extends MovableObject {
 
@@ -30,6 +29,12 @@ class Coin extends MovableObject {
      */
     image = new Image();
 
+    /**
+     * Create a coin at the given position and start its animation loop.
+     *
+     * @param {number} x - X position of the coin.
+     * @param {number} y - Y position of the coin.
+     */
     constructor(x, y) {
         super();
         this.x = x;
@@ -46,7 +51,7 @@ class Coin extends MovableObject {
     }
 
     /**
-     * Animiert die Coin (Dreh-Effekt)
+     * Animate the coin by cycling through image frames.
      */
     animate() {
         setStoppableInterval(() => {
@@ -57,7 +62,9 @@ class Coin extends MovableObject {
     }
 
     /**
-     * Zeichnet die Coin nur wenn sie nicht eingesammelt wurde
+     * Draw the coin if it has not been collected yet.
+     *
+     * @param {CanvasRenderingContext2D} ctx - Canvas context used for drawing.
      */
     draw(ctx) {
         if (!this.collected) {
@@ -66,7 +73,12 @@ class Coin extends MovableObject {
     }
 
     /**
-     * Erstellt mehrere Coins zwischen zwei Punkten
+     * Generate multiple coins along a horizontal range with given spacing.
+     *
+     * @param {number} startX - Start X coordinate.
+     * @param {number} endX - End X coordinate.
+     * @param {number} spacing - Distance between successive coins.
+     * @returns {Coin[]} Array of generated Coin objects.
      */
     static generateCoins(startX, endX, spacing) {
         const coins = [];

@@ -2,8 +2,8 @@
 let level1;
 
 /**
- * Initialisiert Level 1 mit Gegnern, Wolken, Hintergrund, Münzen und Flaschen.
- * Erstellt die komplette Spielwelt-Konfiguration.
+ * Initializes Level 1 with enemies, clouds, background, coins, and bottles.
+ * Creates the complete game world configuration.
  */
 function initLevel() {
     level1 = new Level(

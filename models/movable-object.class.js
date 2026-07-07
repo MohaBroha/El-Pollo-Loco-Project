@@ -1,6 +1,6 @@
 /**
- * MovableObject ist die Basis für alle beweglichen Objekte im Spiel.
- * Sie enthält Physik (Gravity), Kollisionen, Bewegung und Lebenslogik.
+ * Base class for all moving objects in the game.
+ * Implements simple physics (gravity), collision helpers, movement and life logic.
  */
 class MovableObject extends DrawableObject {
 
@@ -55,7 +55,8 @@ class MovableObject extends DrawableObject {
     isKilled = false;
 
     /**
-     * Aktiviert Gravitation und lässt das Objekt fallen.
+     * Enable gravity for this object by updating vertical speed and position
+     * at a fixed interval.
      */
     applyGravity() {
         setStoppableInterval(() => {
@@ -67,9 +68,10 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Prüft ob das Objekt in der Luft ist.
+     * Check whether the object is currently above the ground.
+     * Throwable objects are always considered above ground for their flight.
      *
-     * @returns {boolean}
+     * @returns {boolean} True if the object is above ground.
      */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
@@ -80,11 +82,12 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Allgemeine Kollisionsprüfung mit Shrink-Faktor.
+     * Generic collision test using an optional shrink factor to make hitboxes
+     * smaller than the drawn sprites.
      *
-     * @param {MovableObject} mo anderes Objekt
-     * @param {number} shrink Verkleinerung der Hitbox
-     * @returns {boolean}
+     * @param {MovableObject} mo - Other movable object to test against.
+     * @param {number} [shrink=25] - Pixels to shrink the hitbox from each edge.
+     * @returns {boolean} True if the objects collide.
      */
     isColliding(mo, shrink = 25) {
         return (
@@ -96,10 +99,10 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Seitliche Kollisionserkennung
+     * Detect a side collision between this object and another.
      *
-     * @param {MovableObject} mo anderes Objekt
-     * @returns {boolean}
+     * @param {MovableObject} mo - Other movable object.
+     * @returns {boolean} True if a side collision occurs.
      */
     isSideCollision(mo) {
         const shrink = 35;
@@ -112,10 +115,11 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Kollision von oben (Sprung auf Gegner)
+     * Detect whether this object collides from the top of another object
+     * (e.g. player jumping onto an enemy).
      *
-     * @param {MovableObject} mo anderes Objekt
-     * @returns {boolean}
+     * @param {MovableObject} mo - Other movable object.
+     * @returns {boolean} True if the top collision condition is met.
      */
     isTopCollision(mo) {
         const horizontalShrink = 15;
@@ -128,7 +132,7 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Reduziert Energie bei Treffer
+     * Reduce energy when hit and set last hit timestamp.
      */
     hit() {
         this.energy -= 5;
@@ -140,9 +144,10 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Prüft ob Objekt kürzlich getroffen wurde
+     * Determine whether the object is currently in a hurt (invulnerable)
+     * state based on `lastHit` timestamp.
      *
-     * @returns {boolean}
+     * @returns {boolean} True if the object was hit recently.
      */
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
@@ -151,18 +156,20 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Prüft ob Objekt tot ist
+     * Check if the object is dead either by energy depletion or explicit
+     * kill flag.
      *
-     * @returns {boolean}
+     * @returns {boolean} True if the object is dead.
      */
     isDead() {
         return this.energy == 0 || this.isKilled;
     }
 
     /**
-     * Spielt Animation Frames ab
+     * Cycle through provided image paths and update the current `img`
+     * from the cache.
      *
-     * @param {string[]} images Bildarray
+     * @param {string[]} images - Array of image paths used for animation.
      */
     playAnimation(images) {
         let i = this.currentImage % images.length;
@@ -172,7 +179,7 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Bewegung nach rechts
+     * Move the object to the right by `this.speed` and set direction.
      */
     moveRight() {
         this.x += this.speed;
@@ -180,7 +187,7 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Bewegung nach links
+     * Move the object to the left by `this.speed` and set direction.
      */
     moveLeft() {
         this.x -= this.speed;
@@ -188,16 +195,17 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Sprungbewegung
+     * Initiate a jump by setting a vertical speed.
      */
     jump() {
         this.speedY = 30;
     }
 
     /**
-     * Prüft ob Objekt angreifen kann
+     * Simple heuristic to determine whether this object should currently
+     * attempt an attack (based on distance to character and remaining energy).
      *
-     * @returns {boolean}
+     * @returns {boolean} True if the object is in attacking range/state.
      */
     isAttacking() {
         if (!this.world || !this.world.character) return false;
@@ -205,9 +213,9 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Gibt Angriffshitbox zurück
+     * Return an expanded hitbox used for attack collision checks.
      *
-     * @returns {{x:number,y:number,width:number,height:number}}
+     * @returns {{x:number,y:number,width:number,height:number}} Attack hitbox.
      */
     attackHitbox() {
         return {
@@ -219,7 +227,7 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Spielt Todeszustand aus
+     * Mark object as killed and optionally switch to the death image.
      */
     playDeath() {
         if (this.isKilled) return;

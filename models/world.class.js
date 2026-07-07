@@ -1,9 +1,7 @@
 /**
- * Repräsentiert die komplette Spielwelt.
- * Verwaltet Rendering, Kollisionen, Gegner,
- * Sammelobjekte, Statusleisten und Spiellogik.
+ * Represents the entire game world.
+ * Responsible for rendering, collisions, enemies, pickups, status bars and game flow.
  */
-
 class World {
 
     character = new Character();
@@ -29,12 +27,11 @@ class World {
     throwCooldown = 500;
 
     /**
-     * Erstellt eine neue Spielwelt.
+     * Create a new World instance and start the main loops.
      *
-     * @param {HTMLCanvasElement} canvas Das Canvas-Element des Spiels.
-     * @param {Keyboard} keyboard Die Tastatursteuerung des Spielers.
+     * @param {HTMLCanvasElement} canvas - The game's canvas element.
+     * @param {Object} keyboard - Keyboard input handler.
      */
-
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -58,21 +55,17 @@ class World {
     }
 
     /**
- * Verknüpft den Charakter mit der aktuellen Spielwelt
- * und startet dessen Animationen.
- */
-
+     * Link the player character to this world and start its animations.
+     */
     setWorld() {
         this.character.world = this;
         this.character.animate();
     }
 
     /**
- * Startet die Hauptlogik der Spielwelt.
- * Führt Kollisionen, Würfe und Sammelprüfungen
- * in regelmäßigen Intervallen aus.
- */
-
+     * Start the main game logic loop responsible for collision checks,
+     * pickups, throw handling and end game conditions.
+     */
     run() {
         setStoppableInterval(() => {
             if (gameEnded) return;
@@ -105,26 +98,23 @@ class World {
     }
 
     /**
- * Startet die Hintergrundmusik des Spiels.
- */
-
+     * Start background music playback.
+     */
     startBackgroundMusic() {
         audioManager.playMusic("bgMusic", true);
     }
 
     /**
- * Aktualisiert die Lebensanzeige des Endbosses.
- */
-
+     * Update the endboss status bar to reflect the endboss energy.
+     */
     updateEndbossStatusBar() {
         let endboss = this.level.enemies.find(e => e instanceof Endboss);
         if (endboss) this.endbossStatusBar.setPercentage(endboss.energy);
     }
 
     /**
- * Prüft das Einsammeln von Münzen.
- */
-
+     * Check for coin pickups by the player and update counters/UI.
+     */
     checkCoinPickup() {
         this.coins.forEach(coin => {
             if (!coin.collected && this.checkCollision(this.character, coin) && this.character.isAboveGround()) {
@@ -137,9 +127,8 @@ class World {
     }
 
     /**
- * Prüft das Einsammeln von Flaschen.
- */
-
+     * Check for bottle pickups and add them to the player's inventory.
+     */
     checkBottlePickup() {
         this.throwableObjectsOnGround.forEach((bottle, index) => {
             if (!bottle.collected && this.checkCollision(this.character, bottle)) {
@@ -154,9 +143,8 @@ class World {
     }
 
     /**
- * Prüft das Werfen von Flaschen.
- */
-
+     * Handle player throw input and spawn throwable objects with cooldown.
+     */
     checkThrowObjects() {
         const now = new Date().getTime();
         if (this.keyboard.D && this.character.carryingBottles.length > 0 &&
@@ -172,9 +160,8 @@ class World {
     }
 
     /**
- * Prüft Kollisionen zwischen werfbaren Objekten und anderen Spielobjekten.
- */
-
+     * Check collisions between throwable objects and enemies or ground.
+     */
     checkThrowableObjectCollisions() {
         this.throwableObjects.forEach(bottle => {
 
@@ -203,10 +190,8 @@ class World {
     }
 
     /**
-     * Prüft Kollisionen zwischen dem Charakter und Gegnern.
-     * Handhabt Treffer von oben und seitlichen Berührungen.
+     * Check collisions between the character and enemies and handle hits.
      */
-
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
 
@@ -231,13 +216,12 @@ class World {
     }
 
     /**
-     * Prüft die Kollision zweier Objekte anhand ihrer Hitboxen.
+     * Check collision between two objects using their `offset` and size.
      *
-     * @param {Object} obj1 Erstes Objekt.
-     * @param {Object} obj2 Zweites Objekt.
-     * @returns {boolean} True, wenn eine Kollision vorliegt.
+     * @param {Object} obj1 - First object (must have x,y,width,height).
+     * @param {Object} obj2 - Second object (must have x,y,width,height).
+     * @returns {boolean} True if the objects' hitboxes overlap.
      */
-
     checkCollision(obj1, obj2) {
         const o1 = obj1.offset || { top: 0, bottom: 0, left: 0, right: 0 };
         const o2 = obj2.offset || { top: 0, bottom: 0, left: 0, right: 0 };
@@ -256,10 +240,8 @@ class World {
     }
 
     /**
-    * Rendert die komplette Spielwelt inklusive
-    * Hintergrund, Gegner, Sammelobjekte und UI.
-    */
-
+     * Render the entire game world (background, objects, UI) and schedule next frame.
+     */
     draw() {
         if (gameEnded) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -300,22 +282,20 @@ class World {
     }
 
     /**
-     * Fügt mehrere Objekte zur Zeichenroutine hinzu.
+     * Add multiple objects to the render map by drawing each of them.
      *
-     * @param {Array} objects Liste der zu zeichnenden Objekte.
+     * @param {Array} objects - Array of drawable objects.
      */
-
     addobjectstoMap(objects) {
         if (!objects) return;
         objects.forEach(o => this.addtoMap(o));
     }
 
     /**
- * Zeichnet ein einzelnes Objekt auf das Canvas.
- *
- * @param {Object} mo Das zu zeichnende Objekt.
- */
-
+     * Draw a single object on the canvas and optionally its frame.
+     *
+     * @param {Object} mo - Drawable/movable object to render.
+     */
     addtoMap(mo) {
         if (!mo) return;
         if (mo.otherDirection !== undefined && mo.otherDirection) this.flipImage(mo);
@@ -325,11 +305,10 @@ class World {
     }
 
     /**
- * Spiegelt ein Objekt horizontal.
- *
- * @param {Object} mo Das zu spiegelnde Objekt.
- */
-
+     * Flip the rendering horizontally for an object (used for facing direction).
+     *
+     * @param {Object} mo - Object to flip.
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -338,11 +317,10 @@ class World {
     }
 
     /**
- * Setzt die Spiegelung eines Objekts zurück.
- *
- * @param {Object} mo Das gespiegelte Objekt.
- */
-
+     * Restore canvas state after a horizontal flip and revert the object's X sign.
+     *
+     * @param {Object} mo - Previously flipped object.
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();

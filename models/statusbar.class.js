@@ -1,7 +1,7 @@
 /**
- * StatusBar zeigt die Lebensanzeige des Spielers an.
- * Sie wechselt visuell zwischen verschiedenen Bildern,
- * abhängig vom aktuellen Prozentwert der Gesundheit.
+ * Player health status bar.
+ * Visually represents player health by switching between predefined images
+ * depending on the current percentage value.
  */
 class StatusBar extends DrawableObject {
 
@@ -23,7 +23,7 @@ class StatusBar extends DrawableObject {
     percentage = 100;
 
     /**
-     * Initialisiert die StatusBar und setzt Startwerte.
+     * Initialize the status bar, preload images and set default values.
      */
     constructor() {
         super();
@@ -36,9 +36,9 @@ class StatusBar extends DrawableObject {
     }
 
     /**
-     * Aktualisiert die Anzeige basierend auf dem Prozentwert.
+     * Update the displayed image based on the current health percentage.
      *
-     * @param {number} percentage aktueller Lebenswert
+     * @param {number} percentage - Current health percentage (0-100).
      */
     setPercentage(percentage) {
         this.percentage = percentage;
@@ -47,9 +47,9 @@ class StatusBar extends DrawableObject {
     }
 
     /**
-     * Berechnet den passenden Bildindex abhängig vom Lebenswert.
+     * Resolve the image index corresponding to the current percentage.
      *
-     * @returns {number} Index im IMAGES-Array
+     * @returns {number} Index in the `IMAGES` array.
      */
     resolveImageIndex() {
         if (this.percentage == 100) {
