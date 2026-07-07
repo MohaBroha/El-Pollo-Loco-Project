@@ -286,14 +286,9 @@ class World {
         
         const endboss = this.level.enemies.find(e => e instanceof Endboss);
 
-        if (endboss && Math.abs(this.character.x - endboss.x) < 800) {
-        this.bottleStatusBar.x = 220;
-        this.bottleStatusBar.y = 50;
-        } else {
         this.bottleStatusBar.x = 20;
-        this.bottleStatusBar.y = 100;
-    }
-        this.addtoMap(this.bottleStatusBar);
+this.bottleStatusBar.y = 100;
+this.addtoMap(this.bottleStatusBar);
 
 
 

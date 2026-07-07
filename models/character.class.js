@@ -296,7 +296,7 @@ isJumpAnimationPlaying = false;
                 }
             }
 
-        }, 100);
+        }, 150);
     }
 
     /**

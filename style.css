@@ -129,10 +129,20 @@ canvas {
     display: none;
 }
 
+#top-buttons {
+    position: absolute;
+    top: clamp(4px, 1.5vw, 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 1100;
+}
+
 #fullscreen-btn,
 #mute-btn,
 #info-btn {
-    position: absolute;
+    position: static;
     padding: clamp(4px, 1.5vw, 10px);
     font-size: clamp(20px, 5vw, 30px);
     border: none;
@@ -144,29 +154,13 @@ canvas {
     pointer-events: auto;
     transition: background 0.2s ease, opacity 0.3s ease, transform 0.3s ease;
     line-height: 1;
-    /* Ensure buttons stay above canvas */
 }
-
 #fullscreen-btn:hover,
 #mute-btn:hover,
 #info-btn:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-#info-btn {
-    top: clamp(4px, 1.5vw, 10px);
-    right: clamp(4px, 1.5vw, 10px);
-}
-
-#fullscreen-btn {
-    bottom: clamp(2px, 1vw, 6px);
-    right: clamp(4px, 1.5vw, 10px);
-}
-
-#mute-btn {
-    bottom: clamp(2px, 1vw, 6px);
-    left: clamp(4px, 1.5vw, 10px);
-}
 
 #impressum {
     background: transparent;
