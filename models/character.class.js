@@ -75,6 +75,7 @@ class Character extends MovableObject {
      * Flag: gerade gelandet
      */
     hasJustLanded = false;
+isJumpAnimationPlaying = false;
 
     /**
      * Flag: Schnarchsound abgespielt
@@ -261,9 +262,9 @@ class Character extends MovableObject {
             }
 
             if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
-                return;
-            }
+    this.playJumpAnimation();
+    return;
+}
 
             if (this.idleTime > this.idleDelay) {
                 this.playAnimation(this.IMAGES_IDLE_LONG);
@@ -307,6 +308,24 @@ class Character extends MovableObject {
             audioManager.playSound("walk");
         }
     }
+    /**
+ * Spielt die Sprunganimation genau einmal ab.
+ */
+playJumpAnimation() {
+    if (this.isJumpAnimationPlaying) return;
+
+    this.isJumpAnimationPlaying = true;
+    this.currentImage = 0;
+
+    const jumpInterval = setInterval(() => {
+        this.playAnimation(this.IMAGES_JUMPING);
+
+        if (this.currentImage >= this.IMAGES_JUMPING.length) {
+            clearInterval(jumpInterval);
+            this.isJumpAnimationPlaying = false;
+        }
+    }, 100);
+}
 
     /**
      * Wirft eine Flasche
