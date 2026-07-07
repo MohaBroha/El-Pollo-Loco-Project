@@ -51,6 +51,7 @@ function removeFocus(btn) {
 startBtn.addEventListener('click', () => {
     buttonActive = true;
     startBtn.style.display = 'none';
+document.getElementById('touch-buttons').classList.add('show-touch-buttons');
     playAgainBtn.style.display = 'none';
     if (typeof init === 'function') init();
     removeFocus(startBtn);
