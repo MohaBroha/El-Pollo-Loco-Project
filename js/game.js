@@ -35,7 +35,6 @@ startScreenImage.src = 'img/img/9_intro_outro_screens/start/startscreen_1.png';
 /** @type {number} */
 let startScreenAnimationId;
 
-
 /**
  * Create a stoppable interval and record its id for later clearing.
  *
