@@ -61,8 +61,15 @@ playAgainBtn.addEventListener('click', () => {
     buttonActive = true;
     if (typeof restartGame === 'function') restartGame();
     playAgainBtn.style.display = 'none';
+    document.getElementById('mainMenuBtn').style.display = 'none';
     removeFocus(playAgainBtn);
     buttonActive = false;
+});
+
+const mainMenuBtn = document.getElementById('mainMenuBtn');
+
+mainMenuBtn.addEventListener('click', () => {
+    location.reload();
 });
 
 fullscreenBtn.addEventListener('click', () => {

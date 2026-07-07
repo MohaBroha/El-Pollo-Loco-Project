@@ -127,6 +127,7 @@ function showEndScreen(won = false) {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         ctx.globalAlpha = 1;
         document.getElementById('playAgainBtn').style.display = 'block';
+        document.getElementById('mainMenuBtn').style.display = 'block';
     };
 }
 

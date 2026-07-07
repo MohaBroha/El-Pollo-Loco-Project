@@ -103,7 +103,8 @@ canvas {
 }
 
 #startButton,
-#playAgainBtn {
+#playAgainBtn,
+#mainMenuBtn {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -118,9 +119,15 @@ canvas {
     transition: background 0.2s ease, transform 0.2s ease;
     white-space: nowrap;
 }
+#mainMenuBtn {
+        display: none;
+
+    top: calc(50% + 70px);
+}
 
 #startButton:hover,
-#playAgainBtn:hover {
+#playAgainBtn:hover,
+#mainMenuBtn:hover  {
     background-color: rgb(255, 150, 0);
     transform: translate(-50%, -50%) scale(1.05);
 }
