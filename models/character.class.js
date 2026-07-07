@@ -278,7 +278,7 @@ isJumpAnimationPlaying = false;
             }
 
             if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
-               if (!this.hasJustStopped) {
+                {
                this.playAnimation(this.IMAGES_IDLE);
                this.hasJustStopped = true;
          }
