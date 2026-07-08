@@ -20,6 +20,7 @@ class PickupBottle extends MovableObject {
      */
     constructor(x, y, imageIndex = 0) {
         super().loadImage(PickupBottle.images[imageIndex]);
+        this.loadImages(PickupBottle.images);
         this.x = x;
         this.y = y;
         this.width = 80;
@@ -31,6 +32,7 @@ class PickupBottle extends MovableObject {
             right: 30
         };
         this.collected = false;
+        this.animate();
     }
 
     /**
@@ -42,6 +44,17 @@ class PickupBottle extends MovableObject {
         if (!this.collected) {
             super.draw(ctx);
         }
+    }
+
+    /**
+    * Plays the bottle animation.
+    */
+    animate() {
+        setStoppableInterval(() => {
+            if (!this.collected) {
+                this.playAnimation(PickupBottle.images);
+            }
+        }, 300);
     }
 
     /**
