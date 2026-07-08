@@ -244,41 +244,75 @@ class World {
      */
     draw() {
         if (gameEnded) return;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.save();
-        this.ctx.translate(this.camera_x, 0);
+        this.prepareCanvas();
+        this.drawLevelObjects();
 
-        this.addobjectstoMap(this.level.backgroundObjects);
-        this.addobjectstoMap(this.level.clouds);
-        this.addobjectstoMap(this.level.enemies);
-        this.addobjectstoMap(this.throwableObjectsOnGround);
+        this.drawThrowableObjects();
 
-        this.throwableObjects.forEach(obj => {
-            if (obj && typeof obj.update === 'function') obj.update();
-            this.addtoMap(obj);
-        });
-
-        this.addtoMap(this.character);
+        this.drawCharacter();
         this.coins.forEach(c => c.draw(this.ctx));
 
         this.ctx.restore();
 
-        this.addtoMap(this.statusBar);
-        this.addtoMap(this.coinStatusBar);
+        this.drawStatusBars();
 
         const endboss = this.level.enemies.find(e => e instanceof Endboss);
-
-        this.bottleStatusBar.x = 20;
-        this.bottleStatusBar.y = 100;
-        this.addtoMap(this.bottleStatusBar);
-
-
-
         if (endboss && Math.abs(this.character.x - endboss.x) < 800) {
             this.addtoMap(this.endbossStatusBar);
         }
 
         requestAnimationFrame(() => this.draw());
+    }
+
+    /**
+    * Prepares the canvas for a new frame.
+    */
+    prepareCanvas() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.save();
+        this.ctx.translate(this.camera_x, 0);
+    }
+
+    /**
+    * Draws all level objects.
+    */
+    drawLevelObjects() {
+        this.addobjectstoMap(this.level.backgroundObjects);
+        this.addobjectstoMap(this.level.clouds);
+        this.addobjectstoMap(this.level.enemies);
+        this.addobjectstoMap(this.throwableObjectsOnGround);
+    }
+
+    /**
+    * Draws all throwable objects.
+    */
+    drawThrowableObjects() {
+        this.throwableObjects.forEach(obj => {
+            if (obj && typeof obj.update === "function") {
+                obj.update();
+            }
+
+            this.addtoMap(obj);
+        });
+    }
+
+    /**
+    * Draws the player character.
+    */
+    drawCharacter() {
+        this.addtoMap(this.character);
+    }
+
+    /**
+    * Draws all player status bars.
+    */
+    drawStatusBars() {
+        this.addtoMap(this.statusBar);
+        this.addtoMap(this.coinStatusBar);
+
+        this.bottleStatusBar.x = 20;
+        this.bottleStatusBar.y = 100;
+        this.addtoMap(this.bottleStatusBar);
     }
 
     /**

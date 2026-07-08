@@ -38,24 +38,15 @@ class AudioManager {
      */
     playSound(name, force = false) {
         if (this.muted) return;
-
-        const endSounds = ["bossDeath", "gameOver", "victory"];
-
-        if (this.gameEnded && !force && !endSounds.includes(name)) {
+        if (!this.canPlaySound(name, force)) {
             return;
         }
 
         const entry = AUDIO_LIBRARY[name];
         if (!entry) return;
 
-        // 🔒 Lock erst nach Validierung
         if (!force && this.soundLocks[name]) return;
-
-        this.soundLocks[name] = true;
-
-        setTimeout(() => {
-            this.soundLocks[name] = false;
-        }, 300);
+        this.lockSound(name);
 
         const file = typeof entry === "string" ? entry : entry.file;
 
@@ -64,16 +55,59 @@ class AudioManager {
                 ? entry.volume
                 : this.volume;
 
-        const audio = new Audio(`audio/${file}`);
-        audio.volume = soundVolume;
-        audio.muted = this.muted;
-        audio.currentTime = 0;
+        const audio = this.createAudio(file, soundVolume);
 
         audio.addEventListener('ended', () => this._removeActiveSound(audio));
 
         audio.play().catch(() => { });
 
         this.activeSounds.push({ name, audio });
+    }
+
+    /**
+    * Checks whether a sound can be played.
+    *
+    * @param {string} name - The sound name.
+    * @param {boolean} force - Whether playback should ignore restrictions.
+    * @returns {boolean} True if the sound can be played.
+    */
+    canPlaySound(name, force) {
+        const endSounds = ["bossDeath", "gameOver", "victory"];
+
+        if (this.gameEnded && !force && !endSounds.includes(name)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+    * Activates the sound lock for a short time.
+    *
+    * @param {string} name - The sound name.
+    */
+    lockSound(name) {
+        this.soundLocks[name] = true;
+
+        setTimeout(() => {
+            this.soundLocks[name] = false;
+        }, 300);
+    }
+
+    /**
+    * Creates and configures an audio instance.
+    *
+    * @param {string} file - The audio file name.
+    * @param {number} volume - The playback volume.
+    * @returns {HTMLAudioElement} The configured audio instance.
+    */
+    createAudio(file, volume) {
+        const audio = new Audio(`audio/${file}`);
+        audio.volume = volume;
+        audio.muted = this.muted;
+        audio.currentTime = 0;
+
+        return audio;
     }
 
     /**
