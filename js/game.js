@@ -64,12 +64,9 @@ function drawStartScreen() {
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-
     cancelAnimationFrame(startScreenAnimationId);
-
     initLevel();
     world = new World(canvas, keyboard);
-
     gameStarted = true;
     gameEnded = false;
 }
@@ -80,24 +77,20 @@ function init() {
 function restartGame() {
     gameEnded = false;
     endScreenShown = false;
+    document.getElementById("touch-buttons").style.display = "flex";
     audioManager.setGameEnded(false);
     audioManager.stopAll();
-
     keyboard.RIGHT = false;
     keyboard.LEFT = false;
     keyboard.UP = false;
     keyboard.DOWN = false;
     keyboard.SPACE = false;
     keyboard.D = false;
-
     allIntervals.forEach(id => clearInterval(id));
     allIntervals = [];
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     initLevel();
     world = new World(canvas, keyboard);
-
     gameStarted = true;
 }
 
@@ -109,24 +102,20 @@ function restartGame() {
 function showEndScreen(won = false) {
     if (endScreenShown) return;
     endScreenShown = true;
-
     gameEnded = true;
     audioManager.setGameEnded(true);
     audioManager.stopAll();
     audioManager.playSound(won ? "victory" : "gameOver", true);
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.globalAlpha = 0.75;
-
     const img = new Image();
-
     img.src = won
         ? 'img/img/You won, you lost/You Won B.png'
         : 'img/img/You won, you lost/Game Over.png';
-
     img.onload = () => {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         ctx.globalAlpha = 1;
+        document.getElementById('touch-buttons').style.display = 'none';
         document.getElementById('playAgainBtn').style.display = 'block';
         document.getElementById('mainMenuBtn').style.display = 'block';
     };
