@@ -1,5 +1,12 @@
-# El Pollo Loco
+# 🛠️ Technologies
 
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript_ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Canvas API](https://img.shields.io/badge/Canvas_API-000000?style=for-the-badge)
+![OOP](https://img.shields.io/badge/OOP-Object--Oriented_Programming-6A5ACD?style=for-the-badge)
+
+# El Pollo Loco
 A browser-based 2D platform game inspired by classic side-scrolling adventures. Control Pepe, collect coins and salsa bottles, defeat enemies, and face the dangerous Endboss in an action-packed desert environment.
 
 ## Features
